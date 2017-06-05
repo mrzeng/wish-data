@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PushItem">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="PushItemQuery" type="com.raycloud.overseas.erp.data.common.query.PushItemQuery"/>
+    <typeAlias alias="PushItem" type="com.raycloud.overseas.erp.data.common.pojo.PushItem"/>
+    <resultMap id="pushItem" class="PushItem">
+        <result property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="itemName" column="item_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="localFocus" column="local_focus"/>
+        <result property="pushTime" column="push_time"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="catNames" column="cat_names"/>
+        <result property="genTime" column="gen_time"/>
+        <result property="growth" column="amount_rate"/>
+        <result property="rateScore" column="rate_score"/>
+        <result property="originalPrice" column="original_price"/>
+        <result property="sellerPrice" column="seller_price"/>
+        <result property="sellerFeightPrice" column="seller_freight_price"/>
+        <result property="sellerTotalPrice" column="seller_total_price"/>
+        <result property="wishPrice" column="wish_price"/>
+        <result property="wishFeightPrice" column="wish_freight_price"/>
+        <result property="wishTotalPrice" column="wish_total_price"/>
+        <result property="amount7" column="amount_7"/>
+        <result property="amount" column="offer"/>
+        <result property="newSave7" column="wish_save_7"/>
+        <result property="newSave" column="wish_num"/>
+        <result property="rateNum7" column="rate_num_7"/>
+        <result property="rateNum" column="rate_num"/>
+        <result property="catIds" column="cat_ids"/>
+        <result property="founderId" column="founder_id"/>
+        <result property="rules" column="rules"/>
+    </resultMap>
+    <resultMap id="itemCountMap" class="hashmap">
+        <result property="pushTime" column="push_time"/>
+        <result property="total" column="total"/>
+    </resultMap>
+    <!-- Select SQL -->
+    <sql id="pushItem.selector">
+        SELECT
+        <dynamic>
+            <isNotEmpty property="fields">
+                $fields$
+            </isNotEmpty>
+            <isEmpty property="fields">
+                id , item_id , item_name , user_id  , local_focus , push_time , merchant_id , merchant_name , cat_names , gen_time , amount_rate , rate_score , original_price , seller_price , seller_freight_price , seller_total_price , wish_price , wish_freight_price , wish_total_price , amount_7 , offer , wish_save_7 , wish_num , rate_num_7 , rate_num , cat_ids,founder_id,rules        </isEmpty>
+        </dynamic>
+        FROM push_item$tableId$
+    </sql>
+    <sql id="pushItem.delete">
+        delete FROM push_item$tableId$
+    </sql>
+    <sql id="pushItemList.where">
+        <dynamic prepend=" WHERE ">
+            <isNotNull property="userId" prepend=" AND ">
+                user_id=#userId#
+            </isNotNull>
+            <isNotNull property="founderId" prepend=" AND ">
+                founder_id=#founderId#
+            </isNotNull>
+            <isNotNull property="id" prepend=" AND ">
+                id=#id#
+            </isNotNull>
+            <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+            <isNotNull property="merchantIdList" prepend=" AND ">
+                merchant_id in
+                <iterate conjunction="," open="(" close=")" property="merchantIdList">
+                    #merchantIdList[]#
+                </iterate>
+            </isNotNull>
+            <isNotNull property="itemIdList" prepend=" AND ">
+                item_id in
+                <iterate conjunction="," open="(" close=")" property="itemIdList">
+                    #itemIdList[]#
+                </iterate>
+            </isNotNull>
+            <isNotNull property="itemId" prepend=" AND ">
+                item_id=#itemId#
+            </isNotNull>
+            <isNotNull property="itemName" prepend=" AND ">
+                item_name=#itemName#
+            </isNotNull>
+            <isNotNull property="localFocus" prepend=" AND ">
+                local_focus=#localFocus#
+            </isNotNull>
+            <isNotNull property="pushTimeStart" prepend=" AND ">
+                <![CDATA[  push_time >= #pushTimeStart# ]]>
+            </isNotNull>
+            <isNotNull property="pushTimeEnd" prepend=" AND ">
+                <![CDATA[  push_time <= #pushTimeEnd# ]]>
+            </isNotNull>
+            <isNotNull property="pushTimeEqual" prepend=" AND ">
+                <![CDATA[  push_time = #pushTimeEqual# ]]>
+            </isNotNull>
+            <isNotNull property="merchantId" prepend=" AND ">
+                merchant_id=#merchantId#
+            </isNotNull>
+            <isNotNull property="merchantName" prepend=" AND ">
+                merchant_name=#merchantName#
+            </isNotNull>
+            <isNotNull property="catNames" prepend=" AND ">
+                cat_names=#catNames#
+            </isNotNull>
+            <isNotNull property="genTimeStart" prepend=" AND ">
+                <![CDATA[  gen_time >= #genTimeStart# ]]>
+            </isNotNull>
+            <isNotNull property="genTimeEnd" prepend=" AND ">
+                <![CDATA[  gen_time <= #genTimeEnd# ]]>
+            </isNotNull>
+            <!--<isNotNull property="amountRate" prepend=" AND ">-->
+                <!--amount_rate=#amountRate#-->
+            <!--</isNotNull>-->
+            <isNotNull property="rateScore" prepend=" AND ">
+                rate_score=#rateScore#
+            </isNotNull>
+            <isNotNull property="originalPrice" prepend=" AND ">
+                original_price=#originalPrice#
+            </isNotNull>
+            <isNotNull property="sellerPrice" prepend=" AND ">
+                seller_price=#sellerPrice#
+            </isNotNull>
+            <isNotNull property="sellerFreightPrice" prepend=" AND ">
+                seller_freight_price=#sellerFreightPrice#
+            </isNotNull>
+            <isNotNull property="sellerTotalPrice" prepend=" AND ">
+                seller_total_price=#sellerTotalPrice#
+            </isNotNull>
+            <isNotNull property="wishPrice" prepend=" AND ">
+                wish_price=#wishPrice#
+            </isNotNull>
+            <isNotNull property="wishFreightPrice" prepend=" AND ">
+                wish_freight_price=#wishFreightPrice#
+            </isNotNull>
+            <isNotNull property="wishTotalPrice" prepend=" AND ">
+                wish_total_price=#wishTotalPrice#
+            </isNotNull>
+            <isNotNull property="sellerPriceStart" prepend=" AND ">
+                <![CDATA[  seller_price >= #sellerPriceStart# ]]>
+            </isNotNull>
+            <isNotNull property="sellerPriceEnd" prepend=" AND ">
+                <![CDATA[  seller_price <= #sellerPriceEnd# ]]>
+            </isNotNull>
+            <isNotNull property="amount7Start" prepend=" AND ">
+                <![CDATA[  amount_7 >= #amount7Start# ]]>
+            </isNotNull>
+            <isNotNull property="amount7End" prepend=" AND ">
+                <![CDATA[  amount_7 <= #amount7End# ]]>
+            </isNotNull>
+            <isNotNull property="wishSave7Start" prepend=" AND ">
+                <![CDATA[  wish_save_7 >= #wishSave7Start# ]]>
+            </isNotNull>
+            <isNotNull property="wishSave7End" prepend=" AND ">
+                <![CDATA[  wish_save_7 <= #wishSave7End# ]]>
+            </isNotNull>
+            <isNotNull property="amount7" prepend=" AND ">
+                amount_7=#amount7#
+            </isNotNull>
+            <isNotNull property="offer" prepend=" AND ">
+                offer=#offer#
+            </isNotNull>
+            <isNotNull property="wishSave7" prepend=" AND ">
+                wish_save_7=#wishSave7#
+            </isNotNull>
+            <isNotNull property="wishNum" prepend=" AND ">
+                wish_num=#wishNum#
+            </isNotNull>
+            <isNotNull property="rateNum7" prepend=" AND ">
+                rate_num_7=#rateNum7#
+            </isNotNull>
+            <isNotNull property="rateNum" prepend=" AND ">
+                rate_num=#rateNum#
+            </isNotNull>
+            <isNotNull property="rateNumStart" prepend=" AND ">
+                <![CDATA[  rate_num >= #rateNumStart# ]]>
+            </isNotNull>
+            <isNotNull property="rateNumEnd" prepend=" AND ">
+                <![CDATA[  rate_num <= #rateNumEnd# ]]>
+            </isNotNull>
+            <isNotNull property="catIds" prepend=" AND ">
+                <![CDATA[ cat_ids like concat('%',#catIds#,'%') ]]>
+            </isNotNull>
+            <isNotNull property="rules" prepend=" AND ">
+                <!--<![CDATA[ rules like concat('%',#rules#,'%') ]]>-->
+                <![CDATA[ ($rules$)]]>
+                <!--$rules$-->
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="pushItemList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="sortField">
+                $sortField$ $sortOrder$
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="pushItemList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!-- 根据主键查询 -->
+    <select id="getPushItemByKey" resultMap="pushItem"  parameterClass="hashMap">
+        SELECT       id , item_id , item_name , user_id  , local_focus , push_time , merchant_id, merchant_name , cat_names , gen_time , amount_rate , rate_score , original_price , seller_price , seller_freight_price , seller_total_price , wish_price , wish_freight_price , wish_total_price , amount_7 , offer , wish_save_7 , wish_num , rate_num_7 , rate_num , cat_ids,founder_id,rules  FROM push_item$tableId$
+        WHERE
+        id=#id#         </select>
+    <select id="getPushItemsByKeys" resultMap="pushItem"  parameterClass="hashMap">
+        SELECT       id , item_id , item_name , user_id  , local_focus , push_time , merchant_id, merchant_name , cat_names , gen_time , amount_rate , rate_score , original_price , seller_price , seller_freight_price , seller_total_price , wish_price , wish_freight_price , wish_total_price , amount_7 , offer , wish_save_7 , wish_num , rate_num_7 , rate_num , cat_ids,founder_id,rules  FROM push_item$tableId$
+        WHERE
+        id in
+        <iterate conjunction="," open="(" close=")" property="keys">
+            #keys[]#
+        </iterate>
+    </select>
+
+    <!-- 根据主键删除 -->
+    <delete id="deleteByKey"  parameterClass="hashMap">
+        DELETE FROM push_item$tableId$
+        WHERE
+        id=#id#             </delete>
+
+    <delete id="deleteByKeys">
+        DELETE FROM push_item$tableId$
+        WHERE
+        id in
+        <iterate conjunction="," open="(" close=")" property="keys">
+            #keys[]#
+        </iterate>
+    </delete>
+
+    <!-- 根据主键更新 -->
+    <update id="updatePushItemByKey" parameterClass="PushItem">
+        UPDATE push_item$tableId$
+        <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                id = #id#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id =  substring(#itemId#,1,50)
+            </isNotNull>
+            <isNotNull prepend="," property="itemName">
+                item_name =  substring(#itemName#,1,1024)
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                user_id = #userId#
+            </isNotNull>
+            <isNotNull prepend="," property="localFocus">
+                local_focus = #localFocus#
+            </isNotNull>
+            <isNotNull prepend="," property="pushTime">
+                push_time = #pushTime#
+            </isNotNull>
+            <isNotNull prepend="," property="merchantId">
+                merchant_id =  substring(#merchantId#,1,50)
+            </isNotNull>
+            <isNotNull prepend="," property="merchantName">
+                merchant_name =  substring(#merchantName#,1,1024)
+            </isNotNull>
+            <isNotNull prepend="," property="catNames">
+                cat_names =  substring(#catNames#,1,1024)
+            </isNotNull>
+            <isNotNull prepend="," property="genTime">
+                gen_time = #genTime#
+            </isNotNull>
+            <isNotNull prepend="," property="growth">
+                amount_rate = #growth#
+            </isNotNull>
+            <isNotNull prepend="," property="rateScore">
+                rate_score = #rateScore#
+            </isNotNull>
+            <isNotNull prepend="," property="originalPrice">
+                original_price = #originalPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerPrice">
+                seller_price = #sellerPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerFeightPrice">
+                seller_freight_price = #sellerFeightPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerTotalPrice">
+                seller_total_price = #sellerTotalPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="wishPrice">
+                wish_price = #wishPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="wishFeightPrice">
+                wish_freight_price = #wishFeightPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="wishTotalPrice">
+                wish_total_price = #wishTotalPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="amount7">
+                amount_7 = #amount7#
+            </isNotNull>
+            <isNotNull prepend="," property="amount">
+                offer = #amount#
+            </isNotNull>
+            <isNotNull prepend="," property="newSave7">
+                wish_save_7 = #newSave7#
+            </isNotNull>
+            <isNotNull prepend="," property="newSave">
+                wish_num = #newSave#
+            </isNotNull>
+            <isNotNull prepend="," property="rateNum7">
+                rate_num_7 = #rateNum7#
+            </isNotNull>
+            <isNotNull prepend="," property="rateNum">
+                rate_num = #rateNum#
+            </isNotNull>
+            <isNotNull prepend="," property="catIds">
+                cat_ids =  substring(#catIds#,1,1024)
+            </isNotNull>
+            <isNotNull prepend="," property="founderId">
+                founder_id =  #founderId#
+            </isNotNull>
+            <isNotNull prepend="," property="rules">
+                rules =  #rules#
+            </isNotNull>
+        </dynamic>
+        WHERE
+        id=#id#             </update>
+    <!-- 分页 -->
+    <select id="getPushItemListWithPage" parameterClass="PushItemQuery" resultMap="pushItem">
+        <include refid="pushItem.selector"/>
+        <include refid="pushItemList.where"/>
+        <include refid="pushItemList.order"/>
+        <include refid="pushItemList.limit"/>
+    </select>
+    <select id="getPushItemListCount" parameterClass="PushItemQuery" resultClass="int">
+        SELECT count(1) FROM push_item$tableId$
+        <include refid="pushItemList.where"/>
+    </select>
+    <select id="getPushItemList" parameterClass="PushItemQuery" resultMap="pushItem">
+        <include refid="pushItem.selector"/>
+        <include refid="pushItemList.where"/>
+        <include refid="pushItemList.order"/>
+    </select>
+
+    <delete id="deletePushItem" parameterClass="PushItemQuery">
+        <include refid="pushItem.delete"/>
+        <include refid="pushItemList.where"/>
+    </delete>
+
+    <!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+    注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+    -->
+    <select id="getPushItemListWithPageFields" parameterClass="PushItemQuery" remapResults="true" resultClass="PushItem">
+        <include refid="pushItem.selector"/>
+        <include refid="pushItemList.where"/>
+        <include refid="pushItemList.order"/>
+        <include refid="pushItemList.limit"/>
+    </select>
+    <select id="getPushItemListFields" parameterClass="PushItemQuery" remapResults="true" resultClass="PushItem">
+        <include refid="pushItem.selector"/>
+        <include refid="pushItemList.where"/>
+        <include refid="pushItemList.order"/>
+    </select>
+    <insert id="insertPushItem" parameterClass="PushItem">
+        INSERT INTO push_item$tableId$
+        <dynamic prepend="(" close=")">
+            <isNotEmpty prepend="," property="id">
+                id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="itemId">
+                item_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="itemName">
+                item_name
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="userId">
+                user_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="localFocus">
+                local_focus
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="pushTime">
+                push_time
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="merchantId">
+                merchant_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="merchantName">
+                merchant_name
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="catNames">
+                cat_names
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="genTime">
+                gen_time
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="growth">
+                amount_rate
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="rateScore">
+                rate_score
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="originalPrice">
+                original_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="sellerPrice">
+                seller_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="sellerFeightPrice">
+                seller_freight_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="sellerTotalPrice">
+                seller_total_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="wishPrice">
+                wish_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="wishFeightPrice">
+                wish_freight_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="wishTotalPrice">
+                wish_total_price
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="amount7">
+                amount_7
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="amount">
+                offer
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="newSave7">
+                wish_save_7
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="newSave">
+                wish_num
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="rateNum7">
+                rate_num_7
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="rateNum">
+                rate_num
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="catIds">
+                cat_ids
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="founderId">
+                founder_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="rules">
+                rules
+            </isNotEmpty >
+        </dynamic>
+        VALUES
+        <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                #id#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="itemId">
+                substring(#itemId#,1,50)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="itemName">
+                substring(#itemName#,1,1024)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="userId">
+                #userId#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="localFocus">
+                #localFocus#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="pushTime">
+                #pushTime#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="merchantId">
+                substring(#merchantId#,1,50)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="merchantName">
+                substring(#merchantName#,1,1024)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="catNames">
+                substring(#catNames#,1,1024)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="genTime">
+                #genTime#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="growth">
+                #growth#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="rateScore">
+                #rateScore#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="originalPrice">
+                #originalPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="sellerPrice">
+                #sellerPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="sellerFeightPrice">
+                #sellerFeightPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="sellerTotalPrice">
+                #sellerTotalPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="wishPrice">
+                #wishPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="wishFeightPrice">
+                #wishFeightPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="wishTotalPrice">
+                #wishTotalPrice#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="amount7">
+                #amount7#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="amount">
+                #amount#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="newSave7">
+                #newSave7#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="newSave">
+                #newSave#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="rateNum7">
+                #rateNum7#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="rateNum">
+                #rateNum#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="catIds">
+                substring(#catIds#,1,1024)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="founderId">
+                #founderId#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="rules">
+                #rules#
+            </isNotEmpty >
+        </dynamic>
+    </insert>
+
+    <select id="getItemCountByTime" parameterClass="java.util.HashMap" resultMap="itemCountMap">
+        SELECT push_time,COUNT(*) as 'total' FROM push_item$tableId$ WHERE user_id = #userId# AND founder_id=#founderId# group by push_time;
+    </select>
+</sqlMap>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UserData">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="UserDataQuery" type="com.raycloud.overseas.erp.data.common.query.UserDataQuery"/>
+    <typeAlias alias="UserData" type="com.raycloud.overseas.erp.data.domain.UserData"/>
+    <resultMap id="userData" class="UserData">
+            <result property="userId" column="user_id"/>
+            <result property="id" column="id"/>
+            <result property="uname" column="uname"/>
+            <result property="mobile" column="mobile"/>
+            <result property="email" column="email"/>
+            <result property="dbTableConfig" column="db_table_config"/>
+            <result property="created" column="created"/>
+            <result property="updateTime" column="update_time"/>
+            <result property="guideInfo" column="guide_info"/>
+            <result property="founderId" column="founder_id"/>
+            <result property="sysConfig" column="sys_config"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="userData.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                user_id , id , uname , mobile , email , db_table_config , created , update_time,guide_info,founder_id,sys_config        </isEmpty>
+    </dynamic>
+        FROM user_data
+    </sql>
+    <sql id="userDataList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                user_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                                    <isNotNull property="uname" prepend=" AND ">
+            uname=#uname#
+        </isNotNull>
+                                    <isNotNull property="mobile" prepend=" AND ">
+            mobile=#mobile#
+        </isNotNull>
+                                    <isNotNull property="email" prepend=" AND ">
+            email=#email#
+        </isNotNull>
+                                    <isNotNull property="dbTableConfig" prepend=" AND ">
+            db_table_config=#dbTableConfig#
+        </isNotNull>
+            <isNotNull property="founderId" prepend=" AND ">
+                founder_id=#founderId#
+            </isNotNull>
+                                        <isNotNull property="createdStart" prepend=" AND ">
+                <![CDATA[  created >= #createdStart# ]]>
+            </isNotNull>
+            <isNotNull property="createdEnd" prepend=" AND ">
+                <![CDATA[  created <= #createdEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createdEqual" prepend=" AND ">
+                <![CDATA[  created = #createdEqual# ]]>
+            </isNotNull>
+                                <isNotNull property="updateTimeStart" prepend=" AND ">
+                <![CDATA[  update_time >= #updateTimeStart# ]]>
+            </isNotNull>
+            <isNotNull property="updateTimeEnd" prepend=" AND ">
+                <![CDATA[  update_time <= #updateTimeEnd# ]]>
+            </isNotNull>
+            <isNotNull property="updateTimeEqual" prepend=" AND ">
+                <![CDATA[  update_time = #updateTimeEqual# ]]>
+            </isNotNull>
+                    </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="userDataList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="userDataList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+    <select id="getUserDataByKey" resultMap="userData"  parameterClass="map">
+         SELECT user_id , id , uname , mobile , email , db_table_config , created , update_time,guide_info,founder_id,sys_config  FROM user_data where user_id = #userId#
+    </select>
+                <select id="getUserDatasByKeys" resultMap="userData"  parameterClass="map">
+            SELECT       user_id , id , uname , mobile , email , db_table_config , created , update_time,guide_info,founder_id,sys_config  FROM user_data
+                WHERE
+                                    user_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="UserData.deleteByKey"  parameterClass="hashMap">
+            DELETE FROM user_data
+                WHERE
+                        user_id=#userId#             </delete>
+    
+        <delete id="UserData.deleteByKeys">
+        DELETE FROM user_data
+            WHERE
+                                user_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateUserDataByKey" parameterClass="UserData">
+            UPDATE user_data
+            <dynamic prepend="SET" >
+                                                    <isNotNull prepend="," property="userId">
+                                                    user_id = #userId#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="id">
+                                                    id = #id#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="uname">
+                                                    uname = #uname#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="mobile">
+                                                    mobile = #mobile#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="email">
+                                                                            email =  substring(#email#,1,256)
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="dbTableConfig">
+                                                                            db_table_config =  substring(#dbTableConfig#,1,1024)
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="created">
+                                                    created = #created#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="updateTime">
+                                                    update_time = #updateTime#
+                                            </isNotNull>
+                <isNotNull prepend="," property="guideInfo">
+                    guide_info = #guideInfo#
+                </isNotNull>
+                <isNotNull prepend="," property="founderId">
+                    founder_id = #founderId#
+                </isNotNull>
+                <isNotNull prepend="," property="sysConfig">
+                    sys_config = #sysConfig#
+                </isNotNull>
+                                        </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getUserDataListWithPage" parameterClass="UserDataQuery" resultMap="userData">
+        <include refid="userData.selector"/>
+        <include refid="userDataList.where"/>
+        <include refid="userDataList.order"/>
+        <include refid="userDataList.limit"/>
+    </select>
+    <select id="getUserDataListCount" parameterClass="UserDataQuery" resultClass="int">
+        SELECT count(1) FROM user_data
+        <include refid="userDataList.where"/>
+    </select>
+    <select id="getUserDataList" parameterClass="UserDataQuery" resultMap="userData">
+        <include refid="userData.selector"/>
+        <include refid="userDataList.where"/>
+        <include refid="userDataList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getUserDataListWithPageFields" parameterClass="UserDataQuery" remapResults="true" resultClass="UserData">
+        <include refid="userData.selector"/>
+        <include refid="userDataList.where"/>
+        <include refid="userDataList.order"/>
+        <include refid="userDataList.limit"/>
+    </select>
+    <select id="getUserDataListFields" parameterClass="UserDataQuery" remapResults="true" resultClass="UserData">
+        <include refid="userData.selector"/>
+        <include refid="userDataList.where"/>
+        <include refid="userDataList.order"/>
+    </select>
+        <insert id="insertUserData" parameterClass="UserData">
+        INSERT INTO user_data
+        <dynamic prepend="(" close=")">
+                                                            <isNotEmpty prepend="," property="userId">
+                        user_id
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="uname">
+                        uname
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="mobile">
+                        mobile
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="email">
+                        email
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="dbTableConfig">
+                        db_table_config
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="created">
+                        created
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="updateTime">
+                        update_time
+                    </isNotEmpty >
+            <isNotEmpty prepend="," property="guideInfo">
+                guide_info
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="founderId">
+                founder_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="sysConfig">
+                sys_config
+            </isNotEmpty >
+                                    </dynamic>
+        VALUES
+        <dynamic prepend="(" close=")">
+                                                <isNotEmpty  prepend="," property="userId">
+                                                    #userId#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="uname">
+                                                    #uname#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="mobile">
+                                                    #mobile#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="email">
+                                                                                substring(#email#,1,256)
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="dbTableConfig">
+                                                                                substring(#dbTableConfig#,1,1024)
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="created">
+                                                    #created#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="updateTime">
+                                                    #updateTime#
+                                            </isNotEmpty >
+            <isNotEmpty  prepend="," property="guideInfo">
+                #guideInfo#
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="founderId">
+                founder_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="sysConfig">
+                sys_config
+            </isNotEmpty >
+                                    </dynamic>
+            ON DUPLICATE KEY UPDATE uname=#uname#,mobile=#mobile#,email=#email#,db_table_config=#dbTableConfig#,guide_info=#guideInfo#,founder_id=#founderId#,sys_config=#sysConfig#
+    </insert>
+
+            </sqlMap>

@@ -1,0 +1,16 @@
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/pojo/SolrWishMerchant.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/task/WishItemTask.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/core/WishItemSolrService.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/common/SolrConfig.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/pojo/SolrWishItem.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/common/SolrWishMerchantField.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/query/WishItemSolrQuery.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/common/SolrConnFactory.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/core/ISolrService.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/core/AbstractSolrService.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/core/WishMerchantSolrService.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/query/WishMerchantSolrQuery.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/core/SwitchService.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/query/AbstractSolrQuery.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/common/SolrWishItemField.java
+/Users/zhanxf/IdeaProjects/overseas-erp-data/overseas-erp-data-search/src/main/java/com/raycloud/overseas/erp/data/search/task/WishMerchantTask.java

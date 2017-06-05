@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PushItemMerchantMap">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="PushItemMerchantMapQuery" type="com.raycloud.overseas.erp.data.common.query.PushItemMerchantMapQuery"/>
+    <typeAlias alias="PushItemMerchantMap" type="com.raycloud.overseas.erp.data.common.pojo.PushItemMerchantMap"/>
+    <resultMap id="pushItemMerchantMap" class="PushItemMerchantMap">
+            <result property="id" column="id"/>
+            <result property="userId" column="user_id"/>
+            <result property="merchantId" column="merchant_id"/>
+            <result property="merchantName" column="merchant_name"/>
+            <result property="founderId" column="founder_id"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="pushItemMerchantMap.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , user_id , merchant_id , merchant_name,founder_id        </isEmpty>
+    </dynamic>
+        FROM push_item_merchant_map
+    </sql>
+    <sql id="pushItemMerchantMapList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                                    <isNotNull property="merchantId" prepend=" AND ">
+            merchant_id=#merchantId#
+        </isNotNull>
+                                    <isNotNull property="merchantName" prepend=" AND ">
+            merchant_name=#merchantName#
+        </isNotNull>
+            <isNotNull property="founderId" prepend=" AND ">
+                founder_id=#founderId#
+            </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="pushItemMerchantMapList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="pushItemMerchantMapList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="PushItemMerchantMap.getPushItemMerchantMapByKey" resultMap="pushItemMerchantMap"  parameterClass="hashMap">
+                      SELECT       id , user_id , merchant_id , merchant_name,founder_id  FROM push_item_merchant_map
+                WHERE
+                       id=#id#         </select>
+                <select id="PushItemMerchantMap.getPushItemMerchantMapsByKeys" resultMap="pushItemMerchantMap"  parameterClass="hashMap">
+            SELECT       id , user_id , merchant_id , merchant_name,founder_id  FROM push_item_merchant_map
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deletePushItemByUserId"  parameterClass="PushItemMerchantMapQuery">
+            DELETE FROM push_item_merchant_map
+                WHERE
+                        user_id=#userId# and    founder_id=#founderId#           </delete>
+    
+        <delete id="PushItemMerchantMap.deleteByKeys">
+        DELETE FROM push_item_merchant_map
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updatePushItemMerchantMapByKey" parameterClass="PushItemMerchantMap">
+            UPDATE push_item_merchant_map
+            <dynamic prepend="SET" >
+                                                    <isNotNull prepend="," property="id">
+                                                    id = #id#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="userId">
+                                                    user_id = #userId#
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="merchantId">
+                                                                            merchant_id =  substring(#merchantId#,1,50)
+                                            </isNotNull>
+                                                                <isNotNull prepend="," property="merchantName">
+                                                                            merchant_name =  substring(#merchantName#,1,1024)
+                                            </isNotNull>
+                <isNotNull prepend="," property="founderId">
+                    founder_id =  #founderId#
+                </isNotNull>
+                                        </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getPushItemMerchantMapListWithPage" parameterClass="PushItemMerchantMapQuery" resultMap="pushItemMerchantMap">
+        <include refid="pushItemMerchantMap.selector"/>
+        <include refid="pushItemMerchantMapList.where"/>
+        <include refid="pushItemMerchantMapList.order"/>
+        <include refid="pushItemMerchantMapList.limit"/>
+    </select>
+    <select id="getPushItemMerchantMapListCount" parameterClass="PushItemMerchantMapQuery" resultClass="int">
+        SELECT count(1) FROM push_item_merchant_map
+        <include refid="pushItemMerchantMapList.where"/>
+    </select>
+    <select id="getPushItemMerchantMapList" parameterClass="PushItemMerchantMapQuery" resultMap="pushItemMerchantMap">
+        <include refid="pushItemMerchantMap.selector"/>
+        <include refid="pushItemMerchantMapList.where"/>
+        <include refid="pushItemMerchantMapList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getPushItemMerchantMapListWithPageFields" parameterClass="PushItemMerchantMapQuery" remapResults="true" resultClass="PushItemMerchantMap">
+        <include refid="pushItemMerchantMap.selector"/>
+        <include refid="pushItemMerchantMapList.where"/>
+        <include refid="pushItemMerchantMapList.order"/>
+        <include refid="pushItemMerchantMapList.limit"/>
+    </select>
+    <select id="getPushItemMerchantMapListFields" parameterClass="PushItemMerchantMapQuery" remapResults="true" resultClass="PushItemMerchantMap">
+        <include refid="pushItemMerchantMap.selector"/>
+        <include refid="pushItemMerchantMapList.where"/>
+        <include refid="pushItemMerchantMapList.order"/>
+    </select>
+        <insert id="insertPushItemMerchantMap" parameterClass="PushItemMerchantMap">
+        INSERT INTO push_item_merchant_map
+        <dynamic prepend="(" close=")">
+                                                            <isNotEmpty prepend="," property="id">
+                        id
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="userId">
+                        user_id
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="merchantId">
+                        merchant_id
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="merchantName">
+                        merchant_name
+                    </isNotEmpty >
+                    <isNotEmpty prepend="," property="founderId">
+                        founder_id
+                    </isNotEmpty>
+                                    </dynamic>
+        VALUES
+        <dynamic prepend="(" close=")">
+                                                <isNotEmpty  prepend="," property="id">
+                                                    #id#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="userId">
+                                                    #userId#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="merchantId">
+                                                                                substring(#merchantId#,1,50)
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="merchantName">
+                                                                                substring(#merchantName#,1,1024)
+                                            </isNotEmpty >
+            <isNotEmpty prepend="," property="founderId">
+                #founderId#
+            </isNotEmpty>
+                                    </dynamic>
+    </insert>
+
+            </sqlMap>

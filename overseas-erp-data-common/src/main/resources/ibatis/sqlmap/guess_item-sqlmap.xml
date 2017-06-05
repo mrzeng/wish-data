@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GuessItem">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="GuessItemQuery" type="com.raycloud.overseas.erp.data.common.query.GuessItemQuery"/>
+    <typeAlias alias="GuessItem" type="com.raycloud.overseas.erp.data.domain.GuessItem"/>
+    <resultMap id="guessItem" class="GuessItem">
+            <result property="itemId" column="item_id"/>
+            <result property="itemUrl" column="item_url"/>
+            <result property="star" column="star"/>
+            <result property="recommand" column="recommand"/>
+            <result property="catNames" column="cat_names"/>
+            <result property="amount7" column="amount_7"/>
+            <result property="price" column="price"/>
+            <result property="wishFeightPrice" column="wish_feight_price"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="guessItem.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                item_id , item_url , star , recommand , cat_names , amount_7 , price , wish_feight_price        </isEmpty>
+    </dynamic>
+        FROM guess_item
+    </sql>
+
+    <sql id="guessItem.delete">
+        delete FROM guess_item
+    </sql>
+
+    <sql id="guessItemList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="itemId" prepend=" AND ">
+            item_id=#itemId#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="itemUrl" prepend=" AND ">
+            item_url=#itemUrl#
+        </isNotNull>
+                                    <isNotNull property="star" prepend=" AND ">
+            star=#star#
+        </isNotNull>
+                                    <isNotNull property="recommand" prepend=" AND ">
+            recommand=#recommand#
+        </isNotNull>
+                                    <isNotNull property="catNames" prepend=" AND ">
+            cat_names=#catNames#
+        </isNotNull>
+                                    <isNotNull property="amount7" prepend=" AND ">
+            amount_7=#amount7#
+        </isNotNull>
+                                    <isNotNull property="price" prepend=" AND ">
+            price=#price#
+        </isNotNull>
+                                    <isNotNull property="wishFeightPrice" prepend=" AND ">
+            wish_feight_price=#wishFeightPrice#
+        </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="guessItemList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="guessItemList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getGuessItemByKey" resultMap="guessItem"  parameterClass="hashMap">
+                      SELECT       item_id , item_url , star , recommand , cat_names , amount_7 , price , wish_feight_price  FROM guess_item
+                WHERE
+                       item_id=#itemId#         </select>
+                <select id="getGuessItemsByKeys" resultMap="guessItem"  parameterClass="hashMap">
+            SELECT       item_id , item_url , star , recommand , cat_names , amount_7 , price , wish_feight_price  FROM guess_item
+                WHERE
+                                    item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM guess_item
+                WHERE
+                        item_id=#itemId#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM guess_item
+            WHERE
+                                item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateGuessItemByKey" parameterClass="GuessItem">
+            UPDATE guess_item
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="itemId">
+                                        item_id =  substring(#itemId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="itemUrl">
+                                        item_url =  substring(#itemUrl#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="star">
+                            star = #star#
+                    </isNotNull>
+                        <isNotNull prepend="," property="recommand">
+                                        recommand =  substring(#recommand#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="catNames">
+                                        cat_names =  substring(#catNames#,1,1024)
+                    </isNotNull>
+                        <isNotNull prepend="," property="amount7">
+                            amount_7 = #amount7#
+                    </isNotNull>
+                        <isNotNull prepend="," property="price">
+                            price = #price#
+                    </isNotNull>
+                        <isNotNull prepend="," property="wishFeightPrice">
+                            wish_feight_price = #wishFeightPrice#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        item_id=#itemId#             </update>
+        <!-- 分页 -->
+    <select id="getGuessItemListWithPage" parameterClass="GuessItemQuery" resultMap="guessItem">
+        <include refid="guessItem.selector"/>
+        <include refid="guessItemList.where"/>
+        <include refid="guessItemList.order"/>
+        <include refid="guessItemList.limit"/>
+    </select>
+    <select id="getGuessItemListCount" parameterClass="GuessItemQuery" resultClass="int">
+        SELECT count(1) FROM guess_item
+        <include refid="guessItemList.where"/>
+    </select>
+    <select id="getGuessItemList" parameterClass="GuessItemQuery" resultMap="guessItem">
+        <include refid="guessItem.selector"/>
+        <include refid="guessItemList.where"/>
+        <include refid="guessItemList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getGuessItemListWithPageFields" parameterClass="GuessItemQuery" remapResults="true" resultClass="GuessItem">
+        <include refid="guessItem.selector"/>
+        <include refid="guessItemList.where"/>
+        <include refid="guessItemList.order"/>
+        <include refid="guessItemList.limit"/>
+    </select>
+    <select id="getGuessItemListFields" parameterClass="GuessItemQuery" remapResults="true" resultClass="GuessItem">
+        <include refid="guessItem.selector"/>
+        <include refid="guessItemList.where"/>
+        <include refid="guessItemList.order"/>
+    </select>
+    <delete id="deleteGuessItemList" parameterClass="GuessItemQuery" >
+        <include refid="guessItem.delete"/>
+        <include refid="guessItemList.where"/>
+    </delete>
+
+    <insert id="insertGuessItem" parameterClass="GuessItem">
+    INSERT INTO guess_item
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="itemId">
+        item_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="itemUrl">
+        item_url
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="star">
+        star
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="recommand">
+        recommand
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="catNames">
+        cat_names
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="amount7">
+        amount_7
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="price">
+        price
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="wishFeightPrice">
+        wish_feight_price
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="itemId">
+                                substring(#itemId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="itemUrl">
+                                substring(#itemUrl#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="star">
+                    #star#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="recommand">
+                                substring(#recommand#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="catNames">
+                                substring(#catNames#,1,1024)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="amount7">
+                    #amount7#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="price">
+                    #price#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="wishFeightPrice">
+                    #wishFeightPrice#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

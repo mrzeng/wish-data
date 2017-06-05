@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>overseas-erp-data</artifactId>
+        <groupId>com.raycloud</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>overseas-erp-data-dubbo-service-app</artifactId>
+    <packaging>jar</packaging>
+    <properties>
+        <axis.version>1.4</axis.version>
+        <axis2.version>1.6.2</axis2.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-erp-data-api</artifactId>
+            <!--<version>1.0.1-SNAPSHOT</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-erp-data-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-erp-data-search</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>3.2.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>openapi-client-basic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.2.4.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>bizlogger</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore-nio</artifactId>
+            <version>4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.raycloud</groupId>-->
+            <!--<artifactId>memcache-session-super-util</artifactId>-->
+            <!--<version>2.4.3-KUAJING-SNAPSHOT</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.springframework</groupId>-->
+                    <!--<artifactId>spring</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+
+        <!-- 异步asyncload-->
+        <dependency>
+            <groupId>com.alibaba.asyncload</groupId>
+            <artifactId>asyncload</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- xml -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- jstl -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>ons-client</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.maijia.data</groupId>-->
+            <!--<artifactId>data-monitor-domain</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.maijia.data</groupId>-->
+            <!--<artifactId>data-monitor-service-api</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-data-api-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-data-api-dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.4.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>oversea-erp-usercenter-api</artifactId>
+        </dependency>
+
+        <!--香港服务器api-->
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-erp-platform-api-dubbo</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kf5.support</groupId>
+            <artifactId>kf5-java-client</artifactId>
+        </dependency>
+
+
+<!--LTS -->
+        <dependency>
+            <groupId>com.github.ltsopensource</groupId>
+            <artifactId>lts</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ltsopensource</groupId>
+            <artifactId>lts-spring</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>2.0-beta10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.raycloud</groupId>
+            <artifactId>overseas-erp-api</artifactId>
+        </dependency>
+
+    </dependencies>
+
+</project>

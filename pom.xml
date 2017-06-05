@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.raycloud</groupId>
+    <artifactId>overseas-erp-data</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <!--定义模块-->
+
+
+    <properties>
+        <sourceEncoding>UTF-8</sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.test.skip>true</maven.test.skip>
+        <biz.version>1.4.1-trace-SNAPSHOT</biz.version>
+        <spring.version>3.2.4.RELEASE</spring.version>
+        <aeopenapi.version>0.1</aeopenapi.version>
+
+        <jdk.version>1.7</jdk.version>
+        <maven.test.skip>true</maven.test.skip>
+        <shiro.version>1.2.2</shiro.version>
+        <shiro-freemarker-tags.version>0.1</shiro-freemarker-tags.version>
+        <ehcache.version>2.0.4</ehcache.version>
+        <jackson.version>2.3.0-rc1</jackson.version>
+        <jackson-asl.version>1.9.13</jackson-asl.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <logback.version>1.0.13</logback.version>
+        <jsoup.version>1.7.2</jsoup.version>
+        <jetty.version>7.6.11.v20130520</jetty.version>
+        <mysql.version>5.1.35</mysql.version>
+        <mariadb.version>1.1.7</mariadb.version>
+        <sitemesh.version>2.4.2</sitemesh.version>
+        <freemarker.version>2.3.20</freemarker.version>
+        <mail.version>1.4.4</mail.version>
+        <commons-dbcp.version>1.4</commons-dbcp.version>
+        <c3p0.version>0.9.5-pre8</c3p0.version>
+        <json-lib.version>2.4</json-lib.version>
+        <jmagick.version>6.2.4</jmagick.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <scm.version>0.0.1-SNAPSHOT</scm.version>
+        <jaxen.version>1.1.3</jaxen.version>
+        <mybatis.version>3.3.0</mybatis.version>
+        <mybatis-spring.version>1.2.3</mybatis-spring.version>
+        <mybatis-ehcache.version>1.0.2</mybatis-ehcache.version>
+        <spymemcached.version>2.12.0</spymemcached.version>
+        <mybatis-memcached.version>1.0.0</mybatis-memcached.version>
+        <pinyin4j.version>2.5.0</pinyin4j.version>
+        <guava.version>15.0</guava.version>
+        <dozer.version>5.4.0</dozer.version>
+        <aeopenapi.version>0.1</aeopenapi.version>
+        <httpclient.version>4.3</httpclient.version>
+        <httpasyncclient.version>4.0</httpasyncclient.version>
+        <mockito.version>1.9.5</mockito.version>
+        <spring-data-commons.version>1.9.2.RELEASE</spring-data-commons.version>
+        <barcode4j.version>2.1</barcode4j.version>
+        <avalon-framework.version>4.2.0</avalon-framework.version>
+        <quartz.version>2.2.1</quartz.version>
+        <mail.version>1.4</mail.version>
+        <powermock.version>1.5.3</powermock.version>
+        <jedis.version>2.7.0</jedis.version>
+        <spring-data-redis.version>1.6.0.RELEASE</spring-data-redis.version>
+        <xsoup.version>0.2.4</xsoup.version>
+        <nutch.version>2.2.4</nutch.version>
+        <jxls.version>1.0.5</jxls.version>
+        <fpx.version>1.0</fpx.version>
+        <axis.version>1.4</axis.version>
+        <axis2.version>1.6.2</axis2.version>
+        <commonsdiscovery.version>20040218.194635</commonsdiscovery.version>
+        <jaxrpc.version>1.1</jaxrpc.version>
+        <saajapi.version>1.3.5</saajapi.version>
+        <wsdl4j.version>1.6.3</wsdl4j.version>
+        <spring-batch.version>3.0.3.RELEASE</spring-batch.version>
+        <druid.version>0.2.26</druid.version>
+        <joda-time.version>2.8.1</joda-time.version>
+        <commons-net.version>3.3</commons-net.version>
+        <jsch.version>0.1.53</jsch.version>
+        <crossborder.version>1.0.0</crossborder.version>
+        <data.version>1.0.2</data.version>
+        <data-domain.version>1.0.1</data-domain.version>
+        <platform-api-dubbo.version>1.0-SNAPSHOT</platform-api-dubbo.version>
+    </properties>
+
+
+    <dependencyManagement>
+
+        <dependencies>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>bizlogger</artifactId>
+                <version>${biz.version}</version>
+            </dependency>
+
+
+
+
+            <!-- ###################### servlet start ########################### -->
+
+            <!-- jstl -->
+            <dependency>
+                <groupId>jstl</groupId>
+                <artifactId>jstl</artifactId>
+                <version>1.2</version>
+                <!--<scope>runtime</scope>-->
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- ###################### servlet end ########################### -->
+
+            <!-- ############# spring start ################### -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc-portlet</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- ############# spring end ################### -->
+
+            <!-- jsr303 Bean Validation - spring mvc need it's -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>4.0.2.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.6.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.6.5</version>
+            </dependency>
+
+            <!-- transcation -->
+            <!-- AspectJ -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.6.12</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.6.11</version>
+            </dependency>
+            <!-- druid datasource -->
+
+            <!-- mysql -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.14</version>
+            </dependency>
+            <!-- ibatis -->
+            <dependency>
+                <groupId>org.apache.ibatis</groupId>
+                <artifactId>ibatis-sqlmap</artifactId>
+                <version>2.3.4.726</version>
+            </dependency>
+            <!-- cobar -->
+            <dependency>
+                <groupId>com.alibaba.cobar</groupId>
+                <artifactId>cobar-client</artifactId>
+                <version>1.0.5</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-jcl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <!-- apache commons start -->
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.3</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.8.3</version>
+            </dependency>
+
+
+            <!-- apache commons  end  -->
+
+            <!-- alibaba start -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>2.4.9</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.4.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.sgroschupf</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.28</version>
+            </dependency>
+            <!-- alibaba  end  -->
+
+            <!-- log4J -->
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.16</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.jdmk</groupId>
+                        <artifactId>jmxtools</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.sun.jmx</groupId>
+                        <artifactId>jmxri</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jms</artifactId>
+                        <groupId>javax.jms</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>mail</artifactId>
+                        <groupId>javax.mail</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- raycloud start -->
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>commons-utils</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- ray-task -->
+            <dependency>
+                <groupId>ray-task</groupId>
+                <artifactId>ray-task-manager</artifactId>
+                <version>1.2.0-SNAPSHOT</version>
+            </dependency>
+            <!-- raycloud  end -->
+
+            <!-- trace log -->
+            <dependency>
+                <groupId>com.raycloud.eagle</groupId>
+                <artifactId>trace-commons-util</artifactId>
+                <version>1.0.3-taobao-ati-SNAPSHOT</version>
+            </dependency>
+            <!-- 用于覆盖TOP API 的调用类,起到对静态方法做埋点  -->
+            <dependency>
+                <groupId>com.raycloud.eagle</groupId>
+                <artifactId>_api_log</artifactId>
+                <version>1.0.3-taobao-ati-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>openapi-client-basic</artifactId>
+                <version>${aeopenapi.version}</version>
+            </dependency>
+
+            <!-- 支持slf4j的日志格式 如:log.biz("{}{}{}","1","2","3") -->
+            <!-- 如果启动报错  java.lang.NoSuchMethodException  logger.log(....)
+                 请在父依赖中替换bizlogger的版本 -->
+
+
+            <!-- secret配置管理 -->
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>secret-zk-client</artifactId>
+                <version>jphy_1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- db加密 -->
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>dBPasswordCallback</artifactId>
+                <version>1.1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>15.0</version>
+            </dependency>
+
+
+            <!-- security -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jagregory</groupId>
+                <artifactId>shiro-freemarker-tags</artifactId>
+                <version>${shiro-freemarker-tags.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.shiro</groupId>
+                        <artifactId>shiro-all</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache-web</artifactId>
+                <version>${ehcache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- json -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson-asl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${kaptcha.version}</version>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.maijia.data</groupId>-->
+                <!--<artifactId>data-monitor-domain</artifactId>-->
+                <!--<version>${data-domain.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>com.maijia.data</groupId>-->
+                <!--<artifactId>data-monitor-service-api</artifactId>-->
+                <!--<version>${data.version}</version>-->
+            <!--</dependency>-->
+
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>oversea-erp-usercenter-api</artifactId>
+                <version>2.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-platform-api-dubbo</artifactId>
+                <version>${platform-api-dubbo.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sourceforge.javacsv</groupId>
+                <artifactId>javacsv</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <!-- 异步asyncload-->
+            <dependency>
+                <groupId>com.alibaba.asyncload</groupId>
+                <artifactId>asyncload</artifactId>
+                <version>1.0.0</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring</artifactId>
+                        <groupId>org.springframework</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.kf5.support</groupId>
+                <artifactId>kf5-java-client</artifactId>
+                <version>2.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-data-api</artifactId>
+                <version>1.0.2-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-data-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-data-dubbo-service-app</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-data-search</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-data-web</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-erp-api</artifactId>
+                <version>1.0.1-SNAPSHOT</version>
+            </dependency>
+
+            <!--数据dubbo服务-->
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-data-api-common</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.raycloud</groupId>
+                <artifactId>overseas-data-api-dubbo</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+
+
+    </dependencyManagement>
+
+  <modules>
+    <module>overseas-erp-data-api</module>
+    <module>overseas-erp-data-common</module>
+    <module>overseas-erp-data-dubbo-service-app</module>
+    <module>overseas-erp-data-web</module>
+    <module>overseas-erp-data-search</module>
+  </modules>
+</project>

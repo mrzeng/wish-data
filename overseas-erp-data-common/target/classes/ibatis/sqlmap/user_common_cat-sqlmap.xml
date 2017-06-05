@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="UserCommonCat">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="UserCommonCatQuery" type="com.raycloud.overseas.erp.data.common.query.UserCommonCatQuery"/>
+    <typeAlias alias="UserCommonCat" type="com.raycloud.overseas.erp.data.common.pojo.UserCommonCat"/>
+    <resultMap id="userCommonCat" class="UserCommonCat">
+            <result property="id" column="id"/>
+            <result property="catId" column="cat_id"/>
+            <result property="catName" column="cat_name"/>
+            <result property="userId" column="user_id"/>
+            <result property="type" column="type"/>
+            <result property="created" column="created"/>
+            <result property="catIndex" column="cat_index"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="userCommonCat.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , cat_id , cat_name , user_id , type , created , cat_index        </isEmpty>
+    </dynamic>
+        FROM user_common_cat
+    </sql>
+    <sql id="userCommonCatList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="catId" prepend=" AND ">
+            cat_id=#catId#
+        </isNotNull>
+                                    <isNotNull property="catName" prepend=" AND ">
+            cat_name=#catName#
+        </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                                    <isNotNull property="type" prepend=" AND ">
+            type=#type#
+        </isNotNull>
+                                        <isNotNull property="createdStart" prepend=" AND ">
+                <![CDATA[  created >= #createdStart# ]]>
+            </isNotNull>
+            <isNotNull property="createdEnd" prepend=" AND ">
+                <![CDATA[  created <= #createdEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createdEqual" prepend=" AND ">
+                <![CDATA[  created = #createdEqual# ]]>
+            </isNotNull>
+                            <isNotNull property="catIndex" prepend=" AND ">
+            cat_index=#catIndex#
+        </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="userCommonCatList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="userCommonCatList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getUserCommonCatByKey" resultMap="userCommonCat"  parameterClass="hashMap">
+                      SELECT       id , cat_id , cat_name , user_id , type , created , cat_index  FROM user_common_cat
+                WHERE
+                       id=#id#         </select>
+                <select id="getUserCommonCatsByKeys" resultMap="userCommonCat"  parameterClass="hashMap">
+            SELECT       id , cat_id , cat_name , user_id , type , created , cat_index  FROM user_common_cat
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM user_common_cat
+                WHERE
+                        id=#id#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM user_common_cat
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateUserCommonCatByKey" parameterClass="UserCommonCat">
+            UPDATE user_common_cat
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                                        id =  substring(#id#,1,50)
+                    </isNotNull>
+                        <isNotNull prepend="," property="catId">
+                                        cat_id =  substring(#catId#,1,100)
+                    </isNotNull>
+                        <isNotNull prepend="," property="catName">
+                                        cat_name =  substring(#catName#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="userId">
+                            user_id = #userId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="type">
+                            type = #type#
+                    </isNotNull>
+                        <isNotNull prepend="," property="created">
+                            created = #created#
+                    </isNotNull>
+                        <isNotNull prepend="," property="catIndex">
+                            cat_index = #catIndex#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getUserCommonCatListWithPage" parameterClass="UserCommonCatQuery" resultMap="userCommonCat">
+        <include refid="userCommonCat.selector"/>
+        <include refid="userCommonCatList.where"/>
+        <include refid="userCommonCatList.order"/>
+        <include refid="userCommonCatList.limit"/>
+    </select>
+    <select id="getUserCommonCatListCount" parameterClass="UserCommonCatQuery" resultClass="int">
+        SELECT count(1) FROM user_common_cat
+        <include refid="userCommonCatList.where"/>
+    </select>
+    <select id="getUserCommonCatList" parameterClass="UserCommonCatQuery" resultMap="userCommonCat">
+        <include refid="userCommonCat.selector"/>
+        <include refid="userCommonCatList.where"/>
+        <include refid="userCommonCatList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getUserCommonCatListWithPageFields" parameterClass="UserCommonCatQuery" remapResults="true" resultClass="UserCommonCat">
+        <include refid="userCommonCat.selector"/>
+        <include refid="userCommonCatList.where"/>
+        <include refid="userCommonCatList.order"/>
+        <include refid="userCommonCatList.limit"/>
+    </select>
+    <select id="getUserCommonCatListFields" parameterClass="UserCommonCatQuery" remapResults="true" resultClass="UserCommonCat">
+        <include refid="userCommonCat.selector"/>
+        <include refid="userCommonCatList.where"/>
+        <include refid="userCommonCatList.order"/>
+    </select>
+    <insert id="insertUserCommonCat" parameterClass="UserCommonCat">
+    INSERT INTO user_common_cat
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="catId">
+        cat_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="catName">
+        cat_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="userId">
+        user_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="type">
+        type
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="created">
+        created
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="catIndex">
+        cat_index
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                                substring(#id#,1,50)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="catId">
+                                substring(#catId#,1,100)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="catName">
+                                substring(#catName#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="userId">
+                    #userId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="type">
+                    #type#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="created">
+                    #created#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="catIndex">
+                    #catIndex#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

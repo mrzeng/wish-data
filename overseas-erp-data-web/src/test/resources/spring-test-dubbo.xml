@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    <dubbo:application name="demo"/>
+    <dubbo:registry protocol="zookeeper" address="zoo4.superboss.cc:30002,zoo5.superboss.cc:30002,zoo6.superboss.cc:30002"/>
+    <!--上面2个web里已经定义过了-->
+    <!--引用template-dao中的实现-->
+    <!--如果版本号使用占位符,需要引入spring properties读取-->
+    <dubbo:reference id="taskInfoService"  interface="com.raycloud.service.TaskInfoService"/>
+</beans>

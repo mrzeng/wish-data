@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans default-autowire="byName" xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		     http://www.springframework.org/schema/beans 
+		     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		     http://www.springframework.org/schema/tx
+		     http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		     http://www.springframework.org/schema/aop 
+		     http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		     http://www.springframework.org/schema/context
+		     http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+
+    <!-- 工程里一定要使用此工程模板，不能再使用ibatis原生的api，不然有的情况会不经过cobar的过滤 -->
+    <bean id="sqlMapClientTemplate" class="com.alibaba.cobar.client.CobarSqlMapClientTemplate">
+        <property name="sqlMapClient" ref="sqlMapClient"/>
+        <property name="cobarDataSourceService" ref="dataSources"/>
+        <property name="router" ref="internalRouter"/>
+        <property name="sqlAuditor">
+            <bean class="com.alibaba.cobar.client.audit.SimpleSqlAuditor"/>
+        </property>
+        <property name="profileLongTimeRunningSql" value="false"/>
+        <property name="longTimeRunningSqlIntervalThreshold" value="3600000"/>
+        <property name="dataSource" ref="dataSource1"/>
+    </bean>
+
+
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <!-- 这里配置的dataSource为默认的数据源,如果找不到数据库的话则到该数据源中查找
+        <property name="dataSource" ref="dataSource" />   -->
+        <property name="configLocation">
+            <value>classpath:sqlmap-config.xml</value>
+        </property>
+        <property name="mappingLocations">
+            <value>classpath*:/ibatis/sqlmap/*.xml</value>
+        </property>
+    </bean>
+
+    <bean id="hashFunction" class="com.raycloud.overseas.erp.data.web.cobar.HashFunction"></bean>
+
+    <bean id="internalRouter"
+          class="com.alibaba.cobar.client.router.config.CobarInteralRouterXmlFactoryBean">
+        <property name="functionsMap">
+            <map>
+                <entry key="hash" value-ref="hashFunction">
+                </entry>
+            </map>
+        </property>
+        <property name="configLocations">
+            <list>
+                <value>classpath:/dbrule/sharding-rules-on-namespace.xml</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <!-- nfh9 datasource  1库 -->
+    <bean id="dataSource1" class="com.alibaba.druid.pool.RayDruidDataSource" destroy-method="close" init-method="init">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxWait" value="60000"/>
+        <property name="url" value="jdbc:mysql://115.231.103.216:3306/overseas1?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull"/>
+        <property name="username" value="superboss"/>
+        <property name="secretRequest">
+            <ref bean="secretRequest"/>
+        </property>
+        <property name="diamondCoord" value="test.local"/>
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="5"/>
+        <property name="filters" value="stat,config"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="poolPreparedStatements" value="true"/>
+    </bean>
+
+
+
+    <!-- nfh9 datasource3 3 库-->
+    <bean id="dataSource3" class="com.alibaba.druid.pool.RayDruidDataSource" destroy-method="close" init-method="init">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxWait" value="60000"/>
+        <property name="url" value="jdbc:mysql://localhost:4066/overseas_wish_cobar?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true"/>
+        <property name="username" value="overseas_wish_cobar"/>
+        <property name="secretRequest">
+            <ref bean="secretRequest"/>
+        </property>
+        <property name="diamondCoord" value="maijia_wish.overseas_wish_cobar"/>
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="5"/>
+        <property name="filters" value="stat,config"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="poolPreparedStatements" value="true"/>
+    </bean>
+
+    <bean id="dataSource4" class="com.alibaba.druid.pool.RayDruidDataSource" destroy-method="close" init-method="init">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="maxActive" value="50"/>
+        <property name="maxWait" value="60000"/>
+        <property name="url" value="jdbc:mysql://115.231.103.216:3306/wish?rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true"/>
+        <property name="username" value="superboss"/>
+        <property name="secretRequest">
+            <ref bean="secretRequest"/>
+        </property>
+        <property name="diamondCoord" value="test.local"/>
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="5"/>
+        <property name="filters" value="stat,config"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="poolPreparedStatements" value="true"/>
+    </bean>
+
+    <!--db输出-->
+    <bean id="log-filter" class="com.raycloud.eagle.trace.db.DataBaseTraceLogFilterForLog4j">
+        <!--读SQL合并-->
+        <property name="readMergeSQL" value="false"/>
+        <!--写本地文件-->
+        <property name="readLocal" value="true"/>
+        <!--写淘宝-->
+        <property name="readToTB" value="true"/>
+        <!--写SQL是否合并-->
+        <property name="writeMergeSQL" value="true"/>
+        <!--不写本地-->
+        <property name="writeLocal" value="false"/>
+        <!--写淘宝-->
+        <property name="writeToTB" value="true"/>
+    </bean>
+
+    <!-- 整体数据源 -->
+    <bean id="dataSources"
+          class="com.alibaba.cobar.client.datasources.DefaultCobarDataSourceService">
+        <property name="dataSourceDescriptors">
+            <set>
+                <bean class="com.alibaba.cobar.client.datasources.CobarDataSourceDescriptor">
+                    <property name="identity" value="partition1"/>
+                    <property name="targetDataSource" ref="dataSource1"/>
+                    <property name="targetDetectorDataSource" ref="dataSource1"/>
+                </bean>
+                <!---->
+                <bean class="com.alibaba.cobar.client.datasources.CobarDataSourceDescriptor">
+                    <property name="identity" value="partition3"/>
+                    <property name="targetDataSource" ref="dataSource3"/>
+                    <property name="targetDetectorDataSource" ref="dataSource3"/>
+                </bean>
+                <bean class="com.alibaba.cobar.client.datasources.CobarDataSourceDescriptor">
+                    <property name="identity" value="partition4"/>
+                    <property name="targetDataSource" ref="dataSource4"/>
+                    <property name="targetDetectorDataSource" ref="dataSource4"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+
+    <!-- transaction confige -->
+    <!--transaction-manager：指定事务管理器名字，默认为transactionManager，当使用其他名字时需要明确指定-->
+    <!--proxy-target-class：默认false表示使用JDK代理，如果为true将使用CGLIB代理-->
+    <!--order：定义事务通知顺序，默认Ordered.LOWEST_PRECEDENCE，表示将顺序决定权交给AOP来处理-->
+    <bean id="txManager" class="com.alibaba.cobar.client.transaction.MultipleDataSourcesTransactionManager">
+        <property name="cobarDataSourceService" ref="dataSources"/>
+        <property name="transactionSynchronization" value="2"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txManager" proxy-target-class="true"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+
+</beans>

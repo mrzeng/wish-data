@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SearchItem">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="SearchItemQuery" type="com.raycloud.overseas.erp.data.common.query.SearchItemQuery"/>
+    <typeAlias alias="SearchItem" type="com.raycloud.overseas.erp.data.common.pojo.SearchItem"/>
+    <resultMap id="searchItem" class="SearchItem">
+            <result property="id" column="id"/>
+            <result property="itemId" column="item_id"/>
+            <result property="merchantName" column="merchant_name"/>
+            <result property="created" column="created"/>
+            <result property="updated" column="updated"/>
+            <result property="status" column="status"/>
+            <result property="userId" column="user_id"/>
+            <result property="type" column="type"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="searchItem.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , item_id , merchant_name , created , updated , status , user_id , type        </isEmpty>
+    </dynamic>
+        FROM st_wish_search_item
+    </sql>
+    <sql id="searchItemList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="itemId" prepend=" AND ">
+            item_id=#itemId#
+        </isNotNull>
+                                    <isNotNull property="merchantName" prepend=" AND ">
+            merchant_name=#merchantName#
+        </isNotNull>
+                                        <isNotNull property="createdStart" prepend=" AND ">
+                <![CDATA[  created >= #createdStart# ]]>
+            </isNotNull>
+            <isNotNull property="createdEnd" prepend=" AND ">
+                <![CDATA[  created <= #createdEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createdEqual" prepend=" AND ">
+                <![CDATA[  created = #createdEqual# ]]>
+            </isNotNull>
+                                <isNotNull property="updatedStart" prepend=" AND ">
+                <![CDATA[  updated >= #updatedStart# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEnd" prepend=" AND ">
+                <![CDATA[  updated <= #updatedEnd# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEqual" prepend=" AND ">
+                <![CDATA[  updated = #updatedEqual# ]]>
+            </isNotNull>
+                            <isNotNull property="status" prepend=" AND ">
+            status=#status#
+        </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                                    <isNotNull property="type" prepend=" AND ">
+            type=#type#
+        </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="searchItemList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="searchItemList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getSearchItemByKey" resultMap="searchItem"  parameterClass="hashMap">
+                      SELECT       id , item_id , merchant_name , created , updated , status , user_id , type  FROM st_wish_search_item
+                WHERE
+                       id=#id#         </select>
+                <select id="getSearchItemsByKeys" resultMap="searchItem"  parameterClass="hashMap">
+            SELECT       id , item_id , merchant_name , created , updated , status , user_id , type  FROM st_wish_search_item
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM st_wish_search_item
+                WHERE
+                        id=#id#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM st_wish_search_item
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateSearchItemByKey" parameterClass="SearchItem">
+            UPDATE st_wish_search_item
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                            id = #id#
+                    </isNotNull>
+                        <isNotNull prepend="," property="itemId">
+                                        item_id =  substring(#itemId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="merchantName">
+                                        merchant_name =  substring(#merchantName#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="created">
+                            created = #created#
+                    </isNotNull>
+                        <isNotNull prepend="," property="updated">
+                            updated = #updated#
+                    </isNotNull>
+                        <isNotNull prepend="," property="status">
+                            status = #status#
+                    </isNotNull>
+                        <isNotNull prepend="," property="userId">
+                            user_id = #userId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="type">
+                            type = #type#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getSearchItemListWithPage" parameterClass="SearchItemQuery" resultMap="searchItem">
+        <include refid="searchItem.selector"/>
+        <include refid="searchItemList.where"/>
+        <include refid="searchItemList.order"/>
+        <include refid="searchItemList.limit"/>
+    </select>
+    <select id="getSearchItemListCount" parameterClass="SearchItemQuery" resultClass="int">
+        SELECT count(1) FROM st_wish_search_item
+        <include refid="searchItemList.where"/>
+    </select>
+    <select id="getSearchItemList" parameterClass="SearchItemQuery" resultMap="searchItem">
+        <include refid="searchItem.selector"/>
+        <include refid="searchItemList.where"/>
+        <include refid="searchItemList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getSearchItemListWithPageFields" parameterClass="SearchItemQuery" remapResults="true" resultClass="SearchItem">
+        <include refid="searchItem.selector"/>
+        <include refid="searchItemList.where"/>
+        <include refid="searchItemList.order"/>
+        <include refid="searchItemList.limit"/>
+    </select>
+    <select id="getSearchItemListFields" parameterClass="SearchItemQuery" remapResults="true" resultClass="SearchItem">
+        <include refid="searchItem.selector"/>
+        <include refid="searchItemList.where"/>
+        <include refid="searchItemList.order"/>
+    </select>
+    <insert id="insertSearchItem" parameterClass="SearchItem">
+    INSERT INTO st_wish_search_item
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="itemId">
+        item_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="merchantName">
+        merchant_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="created">
+        created
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="updated">
+        updated
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="status">
+        status
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="userId">
+        user_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="type">
+        type
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                    #id#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="itemId">
+                                substring(#itemId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="merchantName">
+                                substring(#merchantName#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="created">
+                    #created#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="updated">
+                    #updated#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="status">
+                    #status#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="userId">
+                    #userId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="type">
+                    #type#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

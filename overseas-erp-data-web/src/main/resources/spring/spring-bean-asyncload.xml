@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans default-autowire="byName"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+      ">
+
+
+
+    <!-- async相关配置 -->
+    <bean id="asyncLoadExecutor" class="com.alibaba.asyncload.AsyncLoadExecutor" init-method="initital" destroy-method="destory"
+    >
+        <constructor-arg name="acceptCount" value="60"/>
+        <constructor-arg name="poolSize" value="30"/>
+        <constructor-arg name="mode" ref="CALLERRUN"/>
+
+    </bean>
+    <bean id="CALLERRUN" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField" value="com.alibaba.asyncload.AsyncLoadExecutor.HandleMode.CALLERRUN"/>
+    </bean>
+
+
+    <bean id="asyncLoadConfig" class="com.alibaba.asyncload.AsyncLoadConfig" >
+        <property name="defaultTimeout" value="360000"/><!-- 超时时间:6分钟 -->
+        <property name="needThreadLocalSupport" value="false"/>
+        <property name="needBarrierSupport" value="false"/>
+    </bean>
+    <!-- 异步加载模板类 -->
+    <bean id="asyncLoadTemplate" class="com.alibaba.asyncload.impl.template.AsyncLoadTemplate">
+        <property name="executor" ref="asyncLoadExecutor"/>
+        <property name="config" ref="asyncLoadConfig"/>
+    </bean>
+
+
+    <!--  并行加载拦截器 -->
+    <bean id="asyncLoadInterceptor" class="com.alibaba.asyncload.impl.spring.AsyncLoadInterceptor">
+        <property name="asyncLoadTemplate" ref="asyncLoadTemplate"/>
+    </bean>
+
+    <bean id="asyncLoadMethodMatch" class="com.alibaba.asyncload.impl.AsyncLoadPerl5RegexpMethodMatcher">
+        <property name="patterns">
+            <list>
+                <value>(.*)RemoteModel(.*)</value>
+            </list>
+        </property>
+        <property name="excludedPatterns">
+            <list>
+                <value>(.*)listRemoteModel(.*)</value>
+            </list>
+        </property>
+        <property name="excludeOveride" value="false"/>
+    </bean>
+
+
+
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="optimize" value="false"/>
+        <property name="proxyTargetClass" value="false"/>
+        <property name="beanNames">
+            <list>
+                <value>xxxService</value>
+                <!-- 指定具体需要做异步拦截的service bean即可 -->
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>asyncLoadInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

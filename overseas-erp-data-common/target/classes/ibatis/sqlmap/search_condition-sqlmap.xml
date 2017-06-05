@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="SearchCondition">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="SearchConditionQuery" type="com.raycloud.overseas.erp.data.common.query.SearchConditionQuery"/>
+    <typeAlias alias="SearchCondition" type="com.raycloud.overseas.erp.data.common.pojo.SearchCondition"/>
+    <resultMap id="searchCondition" class="SearchCondition">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="description" column="description"/>
+            <result property="filter" column="filter"/>
+            <result property="userId" column="user_id"/>
+            <result property="teamFounderId" column="team_founder_id"/>
+            <result property="status" column="status"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="updatedAt" column="updated_at"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="searchCondition.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , name , description , filter , user_id , team_founder_id , status , created_at , updated_at        </isEmpty>
+    </dynamic>
+        FROM search_condition
+    </sql>
+    <sql id="searchConditionList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="name" prepend=" AND ">
+            name=#name#
+        </isNotNull>
+                                    <isNotNull property="description" prepend=" AND ">
+            description=#description#
+        </isNotNull>
+                                    <isNotNull property="filter" prepend=" AND ">
+            filter=#filter#
+        </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                                    <isNotNull property="teamFounderId" prepend=" AND ">
+            team_founder_id=#teamFounderId#
+        </isNotNull>
+                                    <isNotNull property="status" prepend=" AND ">
+            status=#status#
+        </isNotNull>
+                                        <isNotNull property="createdAtStart" prepend=" AND ">
+                <![CDATA[  created_at >= #createdAtStart# ]]>
+            </isNotNull>
+            <isNotNull property="createdAtEnd" prepend=" AND ">
+                <![CDATA[  created_at <= #createdAtEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createdAtEqual" prepend=" AND ">
+                <![CDATA[  created_at = #createdAtEqual# ]]>
+            </isNotNull>
+                                <isNotNull property="updatedAtStart" prepend=" AND ">
+                <![CDATA[  updated_at >= #updatedAtStart# ]]>
+            </isNotNull>
+            <isNotNull property="updatedAtEnd" prepend=" AND ">
+                <![CDATA[  updated_at <= #updatedAtEnd# ]]>
+            </isNotNull>
+            <isNotNull property="updatedAtEqual" prepend=" AND ">
+                <![CDATA[  updated_at = #updatedAtEqual# ]]>
+            </isNotNull>
+                    </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="searchConditionList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="searchConditionList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getSearchConditionByKey" resultMap="searchCondition"  parameterClass="hashMap">
+                      SELECT       id , name , description , filter , user_id , team_founder_id , status , created_at , updated_at  FROM search_condition
+                WHERE
+                       id=#id#         </select>
+                <select id="getSearchConditionsByKeys" resultMap="searchCondition"  parameterClass="hashMap">
+            SELECT       id , name , description , filter , user_id , team_founder_id , status , created_at , updated_at  FROM search_condition
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM search_condition
+                WHERE
+                        id=#id#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM search_condition
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateSearchConditionByKey" parameterClass="SearchCondition">
+            UPDATE search_condition
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                            id = #id#
+                    </isNotNull>
+                        <isNotNull prepend="," property="name">
+                            name = #name#
+                    </isNotNull>
+                        <isNotNull prepend="," property="description">
+                                        description =  substring(#description#,1,200)
+                    </isNotNull>
+                        <isNotNull prepend="," property="filter">
+                                        filter =  substring(#filter#,1,2048)
+                    </isNotNull>
+                        <isNotNull prepend="," property="userId">
+                            user_id = #userId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="teamFounderId">
+                            team_founder_id = #teamFounderId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="status">
+                                        status =  substring(#status#,1,64)
+                    </isNotNull>
+                        <isNotNull prepend="," property="createdAt">
+                            created_at = #createdAt#
+                    </isNotNull>
+                        <isNotNull prepend="," property="updatedAt">
+                            updated_at = #updatedAt#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getSearchConditionListWithPage" parameterClass="SearchConditionQuery" resultMap="searchCondition">
+        <include refid="searchCondition.selector"/>
+        <include refid="searchConditionList.where"/>
+        <include refid="searchConditionList.order"/>
+        <include refid="searchConditionList.limit"/>
+    </select>
+    <select id="getSearchConditionListCount" parameterClass="SearchConditionQuery" resultClass="int">
+        SELECT count(1) FROM search_condition
+        <include refid="searchConditionList.where"/>
+    </select>
+    <select id="getSearchConditionList" parameterClass="SearchConditionQuery" resultMap="searchCondition">
+        <include refid="searchCondition.selector"/>
+        <include refid="searchConditionList.where"/>
+        <include refid="searchConditionList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getSearchConditionListWithPageFields" parameterClass="SearchConditionQuery" remapResults="true" resultClass="SearchCondition">
+        <include refid="searchCondition.selector"/>
+        <include refid="searchConditionList.where"/>
+        <include refid="searchConditionList.order"/>
+        <include refid="searchConditionList.limit"/>
+    </select>
+    <select id="getSearchConditionListFields" parameterClass="SearchConditionQuery" remapResults="true" resultClass="SearchCondition">
+        <include refid="searchCondition.selector"/>
+        <include refid="searchConditionList.where"/>
+        <include refid="searchConditionList.order"/>
+    </select>
+    <insert id="insertSearchCondition" parameterClass="SearchCondition">
+    INSERT INTO search_condition
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="name">
+        name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="description">
+        description
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="filter">
+        filter
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="userId">
+        user_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="teamFounderId">
+        team_founder_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="status">
+        status
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="createdAt">
+        created_at
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="updatedAt">
+        updated_at
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                    #id#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="name">
+                    #name#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="description">
+                                substring(#description#,1,200)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="filter">
+                                substring(#filter#,1,2048)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="userId">
+                    #userId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="teamFounderId">
+                    #teamFounderId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="status">
+                                substring(#status#,1,64)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="createdAt">
+                    #createdAt#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="updatedAt">
+                    #updatedAt#
+        </isNotEmpty >
+        </dynamic>
+        <selectKey resultClass="int" keyProperty="id" >
+            SELECT @@IDENTITY AS id
+        </selectKey>
+</insert>
+
+            </sqlMap>

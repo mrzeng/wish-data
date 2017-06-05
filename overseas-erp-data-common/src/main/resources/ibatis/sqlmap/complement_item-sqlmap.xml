@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ComplementItem">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="ComplementItemQuery" type="com.raycloud.overseas.erp.data.common.query.ComplementItemQuery"/>
+    <typeAlias alias="ComplementItem" type="com.raycloud.overseas.erp.data.common.pojo.ComplementItem"/>
+    <resultMap id="complementItem" class="ComplementItem">
+            <result property="itemid" column="itemid"/>
+            <result property="createAt" column="create_at"/>
+            <result property="status" column="status"/>
+            <result property="userId" column="user_id"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="complementItem.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                itemid , create_at , status , user_id        </isEmpty>
+    </dynamic>
+        FROM overseas_erp_complement_item
+    </sql>
+    <sql id="complementItemList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="itemid" prepend=" AND ">
+            itemid=#itemid#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                itemid in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                        <isNotNull property="createAtStart" prepend=" AND ">
+                <![CDATA[  create_at >= #createAtStart# ]]>
+            </isNotNull>
+            <isNotNull property="createAtEnd" prepend=" AND ">
+                <![CDATA[  create_at <= #createAtEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createAtEqual" prepend=" AND ">
+                <![CDATA[  create_at = #createAtEqual# ]]>
+            </isNotNull>
+                            <isNotNull property="status" prepend=" AND ">
+            status=#status#
+        </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="complementItemList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="complementItemList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+        <insert id="insertComplementItem" parameterClass="ComplementItem">
+        INSERT INTO overseas_erp_complement_item
+        <dynamic prepend="(" close=")">
+                                                            <isNotEmpty prepend="," property="itemid">
+                        itemid
+                    </isNotEmpty >
+                    <isNotEmpty prepend="," property="status">
+                        status
+                    </isNotEmpty >
+                                                                <isNotEmpty prepend="," property="userId">
+                        user_id
+                    </isNotEmpty >
+                                    </dynamic>
+        VALUES
+        <dynamic prepend="(" close=")">
+                                                <isNotEmpty  prepend="," property="itemid">
+                                                                                substring(#itemid#,1,255)
+                                            </isNotEmpty >
+                                            <isNotEmpty  prepend="," property="status">
+                                                    #status#
+                                            </isNotEmpty >
+                                                                <isNotEmpty  prepend="," property="userId">
+                                                                                substring(#userId#,1,50)
+                                            </isNotEmpty >
+                                    </dynamic>
+    </insert>
+
+                                                        <select id="getItemById" parameterClass="hashMap" resultMap="complementItem">
+                    <include refid="complementItem.selector"/>
+                    where                                              itemid = #itemid#
+                                                    </select>
+                                    </sqlMap>

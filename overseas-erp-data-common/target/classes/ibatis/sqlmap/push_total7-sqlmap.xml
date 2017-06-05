@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PushTotal7">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="PushTotal7Query" type="com.raycloud.overseas.erp.data.common.query.PushTotal7Query"/>
+    <typeAlias alias="PushTotal7" type="com.raycloud.overseas.erp.data.common.pojo.PushTotal7"/>
+    <resultMap id="pushTotal7" class="PushTotal7">
+            <result property="id" column="id"/>
+            <result property="type" column="type"/>
+            <result property="pushTotal" column="push_total"/>
+            <result property="pushResultDetail" column="push_result_detail"/>
+            <result property="uncollectTotal" column="uncollect_total"/>
+            <result property="founderId" column="founder_id"/>
+            <result property="userId" column="user_id"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="pushTotal7.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , type , push_total , push_result_detail , uncollect_total ,founder_id,user_id        </isEmpty>
+    </dynamic>
+        FROM push_total7
+    </sql>
+    <sql id="pushTotal7List.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="type" prepend=" AND ">
+            type=#type#
+        </isNotNull>
+                                    <isNotNull property="pushTotal" prepend=" AND ">
+            push_total=#pushTotal#
+        </isNotNull>
+                                    <isNotNull property="pushResultDetail" prepend=" AND ">
+            push_result_detail=#pushResultDetail#
+        </isNotNull>
+                                    <isNotNull property="uncollectTotal" prepend=" AND ">
+            uncollect_total=#uncollectTotal#
+        </isNotNull>
+                                    <isNotNull property="founderId" prepend=" AND ">
+            founder_id=#founderId#
+        </isNotNull>
+            <isNotNull property="userId" prepend=" AND ">
+                user_id=#userId#
+            </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="pushTotal7List.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="pushTotal7List.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getPushTotal7ByKey" resultMap="pushTotal7"  parameterClass="hashMap">
+                      SELECT       id , type , push_total , push_result_detail , uncollect_total ,founder_id,user_id  FROM push_total7
+                WHERE
+                       id=#id#         </select>
+                <select id="getPushTotal7sByKeys" resultMap="pushTotal7"  parameterClass="hashMap">
+            SELECT       id , type , push_total , push_result_detail , uncollect_total ,founder_id,user_id  FROM push_total7
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM push_total7
+                WHERE
+                        id=#id#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM push_total7
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updatePushTotal7ByKey" parameterClass="PushTotal7">
+            UPDATE push_total7
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                            id = #id#
+                    </isNotNull>
+                        <isNotNull prepend="," property="type">
+                            type = #type#
+                    </isNotNull>
+                        <isNotNull prepend="," property="pushTotal">
+                            push_total = #pushTotal#
+                    </isNotNull>
+                        <isNotNull prepend="," property="pushResultDetail">
+                                        push_result_detail = #pushResultDetail#
+                    </isNotNull>
+                        <isNotNull prepend="," property="uncollectTotal">
+                            uncollect_total = #uncollectTotal#
+                    </isNotNull>
+                        <isNotNull prepend="," property="founderId">
+                            founder_id = #founderId#
+                    </isNotNull>
+                <isNotNull prepend="," property="userId">
+                    user_id = #userId#
+                </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getPushTotal7ListWithPage" parameterClass="PushTotal7Query" resultMap="pushTotal7">
+        <include refid="pushTotal7.selector"/>
+        <include refid="pushTotal7List.where"/>
+        <include refid="pushTotal7List.order"/>
+        <include refid="pushTotal7List.limit"/>
+    </select>
+    <select id="getPushTotal7ListCount" parameterClass="PushTotal7Query" resultClass="int">
+        SELECT count(1) FROM push_total7
+        <include refid="pushTotal7List.where"/>
+    </select>
+    <delete id="deletePushTotal7List" parameterClass="PushTotal7Query">
+        DELETE FROM push_total7
+        <include refid="pushTotal7List.where"/>
+    </delete>
+    <select id="getPushTotal7List" parameterClass="PushTotal7Query" resultMap="pushTotal7">
+        <include refid="pushTotal7.selector"/>
+        <include refid="pushTotal7List.where"/>
+        <include refid="pushTotal7List.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getPushTotal7ListWithPageFields" parameterClass="PushTotal7Query" remapResults="true" resultClass="PushTotal7">
+        <include refid="pushTotal7.selector"/>
+        <include refid="pushTotal7List.where"/>
+        <include refid="pushTotal7List.order"/>
+        <include refid="pushTotal7List.limit"/>
+    </select>
+    <select id="getPushTotal7ListFields" parameterClass="PushTotal7Query" remapResults="true" resultClass="PushTotal7">
+        <include refid="pushTotal7.selector"/>
+        <include refid="pushTotal7List.where"/>
+        <include refid="pushTotal7List.order"/>
+    </select>
+    <insert id="insertPushTotal7" parameterClass="PushTotal7">
+    INSERT INTO push_total7
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="type">
+        type
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="pushTotal">
+        push_total
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="pushResultDetail">
+        push_result_detail
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="uncollectTotal">
+        uncollect_total
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="founderId">
+        founder_id
+            </isNotEmpty >
+        <isNotEmpty prepend="," property="userId">
+            user_id
+        </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                    #id#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="type">
+                    #type#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="pushTotal">
+                    #pushTotal#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="pushResultDetail">
+                                #pushResultDetail#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="uncollectTotal">
+                    #uncollectTotal#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="founderId">
+                    #founderId#
+        </isNotEmpty >
+        <isNotEmpty  prepend="," property="userId">
+            #userId#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

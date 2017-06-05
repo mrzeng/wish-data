@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PushItemRecycle">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="PushItemRecycleQuery" type="com.raycloud.overseas.erp.data.common.query.PushItemRecycleQuery"/>
+    <typeAlias alias="PushItemRecycle" type="com.raycloud.overseas.erp.data.common.pojo.PushItemRecycle"/>
+    <resultMap id="pushItemRecycle" class="PushItemRecycle">
+            <result property="id" column="id"/>
+            <result property="userId" column="user_id"/>
+            <result property="founderId" column="founder_id"/>
+        </resultMap>
+    <resultMap id="itemIdMap" class="java.util.HashMap">
+        <result property="id" column="id"  javaType="java.lang.String"/>
+    </resultMap>
+    <!-- Select SQL -->
+    <sql id="pushItemRecycle.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , user_id , founder_id        </isEmpty>
+    </dynamic>
+        FROM push_item_recycle
+    </sql>
+
+    <sql id="pushItemRecycle.delete">
+        DELETE FROM push_item_recycle
+    </sql>
+
+    <sql id="pushItemRecycleList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+                                    <isNotNull property="founderId" prepend=" AND ">
+            founder_id=#founderId#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                founder_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+
+    <sql id="pushItemRecycleList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="sortField">
+                #sortField# #sortOrder#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+
+    <sql id="pushItemRecycleList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getPushItemRecycleByKey" resultMap="pushItemRecycle"  parameterClass="hashMap">
+                      SELECT       id , user_id , founder_id  FROM push_item_recycle
+                WHERE
+                       id=#id#  AND             user_id=#userId#  AND             founder_id=#founderId#         </select>
+                <select id="getPushItemRecyclesByKeys" resultMap="pushItemRecycle"  parameterClass="hashMap">
+            SELECT       id , user_id , founder_id  FROM push_item_recycle
+                WHERE
+                                    id=#id# AND
+                                user_id=#userId# AND
+                                founder_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM push_item_recycle
+                WHERE
+                        id=#id#  AND             user_id=#userId#  AND             founder_id=#founderId#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM push_item_recycle
+            WHERE
+                                id=#id# AND
+                                user_id=#userId# AND
+                                founder_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updatePushItemRecycleByKey" parameterClass="PushItemRecycle">
+            UPDATE push_item_recycle
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                                        id =  substring(#id#,1,70)
+                    </isNotNull>
+                        <isNotNull prepend="," property="userId">
+                            user_id = #userId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="founderId">
+                            founder_id = #founderId#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#  AND             user_id=#userId#  AND             founder_id=#founderId#             </update>
+        <!-- 分页 -->
+    <select id="getPushItemRecycleListWithPage" parameterClass="PushItemRecycleQuery" resultMap="pushItemRecycle">
+        <include refid="pushItemRecycle.selector"/>
+        <include refid="pushItemRecycleList.where"/>
+        <include refid="pushItemRecycleList.order"/>
+        <include refid="pushItemRecycleList.limit"/>
+    </select>
+    <select id="getPushItemRecycleListCount" parameterClass="PushItemRecycleQuery" resultClass="int">
+        SELECT count(1) FROM push_item_recycle
+        <include refid="pushItemRecycleList.where"/>
+    </select>
+    <select id="getPushItemRecycleList" parameterClass="PushItemRecycleQuery" resultMap="pushItemRecycle">
+        <include refid="pushItemRecycle.selector"/>
+        <include refid="pushItemRecycleList.where"/>
+        <include refid="pushItemRecycleList.order"/>
+    </select>
+    <select id="getPushItemRecycleIdMap" parameterClass="PushItemRecycleQuery" resultMap="itemIdMap">
+        select id from push_item_recycle where user_id = #userId# and founder_id = #founderId#
+    </select>
+    <select id="deletePushItemRecycle" parameterClass="PushItemRecycleQuery">
+        <include refid="pushItemRecycle.delete"/>
+        <include refid="pushItemRecycleList.where"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getPushItemRecycleListWithPageFields" parameterClass="PushItemRecycleQuery" remapResults="true" resultClass="PushItemRecycle">
+        <include refid="pushItemRecycle.selector"/>
+        <include refid="pushItemRecycleList.where"/>
+        <include refid="pushItemRecycleList.order"/>
+        <include refid="pushItemRecycleList.limit"/>
+    </select>
+    <select id="getPushItemRecycleListFields" parameterClass="PushItemRecycleQuery" remapResults="true" resultClass="PushItemRecycle">
+        <include refid="pushItemRecycle.selector"/>
+        <include refid="pushItemRecycleList.where"/>
+        <include refid="pushItemRecycleList.order"/>
+    </select>
+    <insert id="insertPushItemRecycle" parameterClass="PushItemRecycle">
+    INSERT INTO push_item_recycle
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="userId">
+        user_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="founderId">
+        founder_id
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                                substring(#id#,1,70)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="userId">
+                    #userId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="founderId">
+                    #founderId#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

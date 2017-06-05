@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="PushItemRuleTrace">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="PushItemRuleTraceQuery" type="com.raycloud.overseas.erp.data.common.query.PushItemRuleTraceQuery"/>
+    <typeAlias alias="PushItemRuleTrace" type="com.raycloud.overseas.erp.data.common.pojo.PushItemRuleTrace"/>
+    <resultMap id="pushItemRuleTrace" class="PushItemRuleTrace">
+        <result property="ruleId" column="rule_id"/>
+        <result property="insertDate" column="insert_date"/>
+        <result property="itemId" column="item_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="founderId" column="founder_id"/>
+    </resultMap>
+    <resultMap id="pushItemRuleTraceMap" class="hashmap">
+        <result property="ruleId" column="rule_id"/>
+        <result property="insertDate" column="insert_date"/>
+        <result property="total" column="total"/>
+    </resultMap>
+    <!-- Select SQL -->
+    <sql id="pushItemRuleTrace.selector">
+        SELECT
+        <dynamic>
+            <isNotEmpty property="fields">
+                $fields$
+            </isNotEmpty>
+            <isEmpty property="fields">
+                rule_id , insert_date , item_id , user_id , founder_id       </isEmpty>
+        </dynamic>
+        FROM push_item_rule_trace
+    </sql>
+
+    <sql id="pushItemRuleTrace.delete">
+        DELETE FROM push_item_rule_trace
+    </sql>
+
+    <sql id="pushItemRuleTraceList.where">
+        <dynamic prepend=" WHERE ">
+            <isNotNull property="ruleId" prepend=" AND ">
+                rule_id=#ruleId#
+            </isNotNull>
+            <isNotNull property="insertDateEqual" prepend=" AND ">
+                insert_date=#insertDateEqual#
+            </isNotNull>
+            <isNotNull property="insertDateStart" prepend=" AND ">
+                <![CDATA[
+                    insert_date >=#insertDateStart#
+                ]]>
+            </isNotNull>
+            <isNotNull property="insertDateEnd" prepend=" AND ">
+                <![CDATA[
+                    insert_date <=#insertDateEnd#
+                ]]>
+            </isNotNull>
+            <isNotNull property="keys" prepend=" AND ">
+                insert_date in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+            <isNotNull property="itemId" prepend=" AND ">
+                item_id=#itemId#
+            </isNotNull>
+            <isNotNull property="userId" prepend=" AND ">
+                user_id=#userId#
+            </isNotNull>
+            <isNotNull property="founderId" prepend=" AND ">
+                founder_id=#founderId#
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+
+
+    <!-- 用#号会导致druid连接池报错 -->
+
+    <sql id="pushItemRuleTraceList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="sortField">
+                #sortField# #sortOrder#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+
+    <sql id="pushItemRuleTraceList.group">
+        <dynamic prepend=" GROUP BY ">
+            <isNotEmpty property="groupFields">
+                <iterate property="groupFields" conjunction="," open="" close="">
+                    #groupFields[]#
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="pushItemRuleTraceList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <!-- 根据主键查询 -->
+    <select id="getPushItemRuleTraceByKey" resultMap="pushItemRuleTrace"  parameterClass="hashMap">
+        SELECT       rule_id , insert_date , item_id , user_id , founder_id  FROM push_item_rule_trace
+        WHERE
+        rule_id=#ruleId#  AND             insert_date=#insertDate#         </select>
+    <select id="getPushItemRuleTracesByKeys" resultMap="pushItemRuleTrace"  parameterClass="hashMap">
+        SELECT       rule_id , insert_date , item_id , user_id , founder_id FROM push_item_rule_trace
+        WHERE
+        rule_id=#ruleId# AND
+        insert_date in
+        <iterate conjunction="," open="(" close=")" property="keys">
+            #keys[]#
+        </iterate>
+    </select>
+
+    <!-- 根据主键删除 -->
+    <delete id="deleteByKey"  parameterClass="hashMap">
+        DELETE FROM push_item_rule_trace
+        WHERE
+        rule_id=#ruleId#  AND             insert_date=#insertDate#             </delete>
+
+    <delete id="deleteByKeys">
+        DELETE FROM push_item_rule_trace
+        WHERE
+        rule_id=#ruleId# AND
+        insert_date in
+        <iterate conjunction="," open="(" close=")" property="keys">
+            #keys[]#
+        </iterate>
+    </delete>
+
+    <!-- 根据主键更新 -->
+    <update id="updatePushItemRuleTraceByKey" parameterClass="PushItemRuleTrace">
+        UPDATE push_item_rule_trace
+        <dynamic prepend="SET" >
+            <isNotNull prepend="," property="ruleId">
+                rule_id = #ruleId#
+            </isNotNull>
+            <isNotNull prepend="," property="insertDate">
+                insert_date = #insertDate#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id =  substring(#itemId#,1,50)
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                user_id = #userId#
+            </isNotNull>
+            <isNotNull prepend="," property="founderId">
+                founder_id = #founderId#
+            </isNotNull>
+        </dynamic>
+        WHERE
+        rule_id=#ruleId#  AND             insert_date=#insertDate#             </update>
+    <!-- 分页 -->
+    <select id="getPushItemRuleTraceListWithPage" parameterClass="PushItemRuleTraceQuery" resultMap="pushItemRuleTrace">
+        <include refid="pushItemRuleTrace.selector"/>
+        <include refid="pushItemRuleTraceList.where"/>
+        <include refid="pushItemRuleTraceList.order"/>
+        <include refid="pushItemRuleTraceList.limit"/>
+    </select>
+    <select id="getPushItemRuleTraceListCount" parameterClass="PushItemRuleTraceQuery" resultClass="int">
+        SELECT count(1) FROM push_item_rule_trace
+        <include refid="pushItemRuleTraceList.where"/>
+    </select>
+    <select id="getPushItemRuleTraceList" parameterClass="PushItemRuleTraceQuery" resultMap="pushItemRuleTrace">
+        <include refid="pushItemRuleTrace.selector"/>
+        <include refid="pushItemRuleTraceList.where"/>
+        <include refid="pushItemRuleTraceList.order"/>
+    </select>
+
+    <select id="getItemIdList" parameterClass="PushItemRuleTraceQuery" resultClass="string">
+        <include refid="pushItemRuleTrace.selector"/>
+        <include refid="pushItemRuleTraceList.where"/>
+    </select>
+
+    <select id="deletePushItemRuleTrace" parameterClass="PushItemRuleTraceQuery">
+        <include refid="pushItemRuleTrace.delete"/>
+        <include refid="pushItemRuleTraceList.where"/>
+    </select>
+
+    <!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+    注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+    -->
+    <select id="getPushItemRuleTraceListWithPageFields" parameterClass="PushItemRuleTraceQuery" remapResults="true" resultClass="PushItemRuleTrace">
+        <include refid="pushItemRuleTrace.selector"/>
+        <include refid="pushItemRuleTraceList.where"/>
+        <include refid="pushItemRuleTraceList.order"/>
+        <include refid="pushItemRuleTraceList.limit"/>
+    </select>
+    <select id="getPushItemRuleTraceListFields" parameterClass="PushItemRuleTraceQuery" remapResults="true" resultClass="PushItemRuleTrace">
+        <include refid="pushItemRuleTrace.selector"/>
+        <include refid="pushItemRuleTraceList.where"/>
+        <include refid="pushItemRuleTraceList.order"/>
+    </select>
+    <insert id="insertPushItemRuleTrace" parameterClass="PushItemRuleTrace">
+        REPLACE INTO push_item_rule_trace
+        <dynamic prepend="(" close=")">
+            <isNotEmpty prepend="," property="ruleId">
+                rule_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="insertDate">
+                insert_date
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="itemId">
+                item_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="userId">
+                user_id
+            </isNotEmpty >
+            <isNotEmpty prepend="," property="founderId">
+                founder_id
+            </isNotEmpty >
+        </dynamic>
+        VALUES
+        <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="ruleId">
+                #ruleId#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="insertDate">
+                #insertDate#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="itemId">
+                substring(#itemId#,1,50)
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="userId">
+                #userId#
+            </isNotEmpty >
+            <isNotEmpty  prepend="," property="founderId">
+                #founderId#
+            </isNotEmpty >
+        </dynamic>
+    </insert>
+
+    <select id="getItemCount" parameterClass="PushItemRuleTraceQuery" resultClass="int">
+        select count(*) from (select distinct(item_id) from push_item_rule_trace
+        <include refid="pushItemRuleTraceList.where"/>
+        ) a
+    </select>
+
+    <select id="getItemCountWithGroup" parameterClass="PushItemRuleTraceQuery" resultMap="pushItemRuleTraceMap">
+        select insert_date,rule_id,count(*) as 'total' from push_item_rule_trace
+        <include refid="pushItemRuleTraceList.where"/>
+        <!--<include refid="pushItemRuleTraceList.group"/>-->
+        group by rule_id,insert_date order by insert_date desc
+    </select>
+
+</sqlMap>

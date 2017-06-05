@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="GuessMerchant">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="GuessMerchantQuery" type="com.raycloud.overseas.erp.data.common.query.GuessMerchantQuery"/>
+    <typeAlias alias="GuessMerchant" type="com.raycloud.overseas.erp.data.domain.GuessMerchant"/>
+    <resultMap id="guessMerchant" class="GuessMerchant">
+            <result property="merchantId" column="merchant_id"/>
+            <result property="merchantUrl" column="merchant_url"/>
+            <result property="star" column="star"/>
+            <result property="recommand" column="recommand"/>
+            <result property="merchantName" column="merchant_name"/>
+            <result property="itemCount" column="item_count"/>
+            <result property="amount7" column="amount_7"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="guessMerchant.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                merchant_id , merchant_url , star , recommand , merchant_name , item_count , amount_7        </isEmpty>
+    </dynamic>
+        FROM guess_merchant
+    </sql>
+
+    <sql id="guessMerchant.delete">
+        delete FROM guess_merchant
+    </sql>
+
+    <sql id="guessMerchantList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="merchantId" prepend=" AND ">
+            merchant_id=#merchantId#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                merchant_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+                                    <isNotNull property="merchantUrl" prepend=" AND ">
+            merchant_url=#merchantUrl#
+        </isNotNull>
+                                    <isNotNull property="star" prepend=" AND ">
+            star=#star#
+        </isNotNull>
+                                    <isNotNull property="recommand" prepend=" AND ">
+            recommand=#recommand#
+        </isNotNull>
+                                    <isNotNull property="merchantName" prepend=" AND ">
+            merchant_name=#merchantName#
+        </isNotNull>
+                                    <isNotNull property="itemCount" prepend=" AND ">
+            item_count=#itemCount#
+        </isNotNull>
+                                    <isNotNull property="amount7" prepend=" AND ">
+            amount_7=#amount7#
+        </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="guessMerchantList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="guessMerchantList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getGuessMerchantByKey" resultMap="guessMerchant"  parameterClass="hashMap">
+                      SELECT       merchant_id , merchant_url , star , recommand , merchant_name , item_count , amount_7  FROM guess_merchant
+                WHERE
+                       merchant_id=#merchantId#         </select>
+                <select id="getGuessMerchantsByKeys" resultMap="guessMerchant"  parameterClass="hashMap">
+            SELECT       merchant_id , merchant_url , star , recommand , merchant_name , item_count , amount_7  FROM guess_merchant
+                WHERE
+                                    merchant_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM guess_merchant
+                WHERE
+                        merchant_id=#merchantId#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM guess_merchant
+            WHERE
+                                merchant_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateGuessMerchantByKey" parameterClass="GuessMerchant">
+            UPDATE guess_merchant
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="merchantId">
+                                        merchant_id =  substring(#merchantId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="merchantUrl">
+                                        merchant_url =  substring(#merchantUrl#,1,1024)
+                    </isNotNull>
+                        <isNotNull prepend="," property="star">
+                            star = #star#
+                    </isNotNull>
+                        <isNotNull prepend="," property="recommand">
+                                        recommand =  substring(#recommand#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="merchantName">
+                                        merchant_name =  substring(#merchantName#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="itemCount">
+                            item_count = #itemCount#
+                    </isNotNull>
+                        <isNotNull prepend="," property="amount7">
+                            amount_7 = #amount7#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        merchant_id=#merchantId#             </update>
+        <!-- 分页 -->
+    <select id="getGuessMerchantListWithPage" parameterClass="GuessMerchantQuery" resultMap="guessMerchant">
+        <include refid="guessMerchant.selector"/>
+        <include refid="guessMerchantList.where"/>
+        <include refid="guessMerchantList.order"/>
+        <include refid="guessMerchantList.limit"/>
+    </select>
+    <select id="getGuessMerchantListCount" parameterClass="GuessMerchantQuery" resultClass="int">
+        SELECT count(1) FROM guess_merchant
+        <include refid="guessMerchantList.where"/>
+    </select>
+    <select id="getGuessMerchantList" parameterClass="GuessMerchantQuery" resultMap="guessMerchant">
+        <include refid="guessMerchant.selector"/>
+        <include refid="guessMerchantList.where"/>
+        <include refid="guessMerchantList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getGuessMerchantListWithPageFields" parameterClass="GuessMerchantQuery" remapResults="true" resultClass="GuessMerchant">
+        <include refid="guessMerchant.selector"/>
+        <include refid="guessMerchantList.where"/>
+        <include refid="guessMerchantList.order"/>
+        <include refid="guessMerchantList.limit"/>
+    </select>
+    <select id="getGuessMerchantListFields" parameterClass="GuessMerchantQuery" remapResults="true" resultClass="GuessMerchant">
+        <include refid="guessMerchant.selector"/>
+        <include refid="guessMerchantList.where"/>
+        <include refid="guessMerchantList.order"/>
+    </select>
+
+    <delete id="deleteGuessMerchantList" parameterClass="GuessMerchantQuery">
+        <include refid="guessMerchant.delete"/>
+        <include refid="guessMerchantList.where"/>
+    </delete>
+    <insert id="insertGuessMerchant" parameterClass="GuessMerchant">
+    INSERT INTO guess_merchant
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="merchantId">
+        merchant_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="merchantUrl">
+        merchant_url
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="star">
+        star
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="recommand">
+        recommand
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="merchantName">
+        merchant_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="itemCount">
+        item_count
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="amount7">
+        amount_7
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="merchantId">
+                                substring(#merchantId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="merchantUrl">
+                                substring(#merchantUrl#,1,1024)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="star">
+                    #star#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="recommand">
+                                substring(#recommand#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="merchantName">
+                                substring(#merchantName#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="itemCount">
+                    #itemCount#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="amount7">
+                    #amount7#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

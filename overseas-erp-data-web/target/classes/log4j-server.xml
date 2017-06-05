@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+
+    <!-- Biz 日志文件 -->
+    <appender name="biz_appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs/biz/biz.log"/>
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="4MB"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[date:%d{yyyy-MM-dd HH:mm:ss}] %m%n"/>
+        </layout>
+        <filter class="com.raycloud.bizlogger.LoggerFilter">
+            <param name="LevelMin" value="40050"/>
+            <param name="LevelMax" value="40050"/>
+        </filter>
+    </appender>
+    <!--
+       * 1. 一个appender子元素定义一个日志输出目的地
+       * 2. 一个logger子元素定义一个日志写出器
+    -->
+    <appender name="consoleAppend" class="org.apache.log4j.ConsoleAppender" >
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-d{HH:mm:ss} [%5p][%t]--- %m%n" />
+        </layout>
+        <!--<filter class="com.raycloud.bizlogger.LoggerFilter">-->
+            <!--<param name="LevelMin" value="40050"/>-->
+            <!--<param name="LevelMax" value="40050"/>-->
+        <!--</filter>-->
+    </appender>
+
+    <!-- SQL语句 start -->
+    <!--<logger name="java.sql.PreparedStatement" additivity="false">-->
+        <!--<level value="DEBUG" />-->
+        <!--<appender-ref ref="consoleAppend" />-->
+    <!--</logger>-->
+    <!--<logger name="java.sql.Connection" additivity="false">-->
+        <!--<level value="DEBUG" />-->
+        <!--<appender-ref ref="consoleAppend" />-->
+    <!--</logger>-->
+    <!--<logger name="com.ibatis" additivity="false">-->
+        <!--<level value="DEBUG" />-->
+        <!--<appender-ref ref="consoleAppend" />-->
+    <!--</logger>-->
+    <!-- SQL语句 start -->
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="consoleAppend" />
+        <appender-ref ref="biz_appender"/>
+    </root>
+
+</log4j:configuration>

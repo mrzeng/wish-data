@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="WISH_ITEM">
+    <typeAlias alias="WISH_BASE_ITEM" type="com.raycloud.overseas.data.commom.domain.wish.domain.Item"/>
+
+    <resultMap id="BaseResultMap" class="WISH_BASE_ITEM">
+        <result column="insert_date" property="insertDate"/>
+        <result column="merchant_id" property="merchantId"/>
+        <result column="itemid" property="itemId"/>
+        <result column="cat_ids" property="catIds"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="seller_price" property="sellerPrice"/>
+        <result column="seller_freight_price" property="sellerFreightPrice"/>
+        <result column="wish_price" property="wishPrice"/>
+        <result column="wish_freight_price" property="wishFreightPrice"/>
+        <result column="gen_time" property="genTime"/>
+        <result column="itemname" property="itemName"/>
+        <!--<result column="main_image" property="mainImage"/>-->
+        <!--<result column="small_image" property="smallImage"/>-->
+        <result column="removed_flag" property="removedFlag"/>
+        <result column="deleted_flag" property="deletedFlag"/>
+        <result column="wish_tag" property="wishTag"/>
+        <result column="custom_tag" property="customTag"/>
+        <!--<result column="is_fulfill_by_wish_flag" property="isFulfillByWishFlag"/>-->
+        <!--<result column="is_active_flag" property="isActiveFlag"/>-->
+        <!--<result column="requires_review_flag" property="requiresReviewFlag"/>-->
+        <result column="already_recommended_flag" property="alreadyRecommendedFlag"/>
+        <!--<result column="total_stock" property="totalStock"/>-->
+        <result column="offer" property="offer"/>
+        <!--<result column="fbw_active" property="fbwActive"/>-->
+        <result column="rate_num" property="rateNum"/>
+        <result column="wish_num" property="wishNum"/>
+        <result column="rate_score" property="rateScore"/>
+        <result column="amount_1" property="amount1"/>
+        <result column="price_1" property="price1"/>
+        <result column="wish_save_1" property="wishSave1"/>
+        <result column="rate_num_1" property="rateNum1"/>
+        <result column="amount_7" property="amount7"/>
+        <result column="price_7" property="price7"/>
+        <result column="wish_save_7" property="wishSave7"/>
+        <result column="rate_num_7" property="rateNum7"/>
+        <!--<result column="amount_30" property="amount30"/>-->
+        <!--<result column="price_30" property="price30"/>-->
+        <!--<result column="wish_save_30" property="wishSave30"/>-->
+        <!--<result column="rate_num_30" property="rateNum30"/>-->
+        <result column="extra_image_list" property="extraImageList"/>
+        <!--<result column="amount" property="amount"/>-->
+        <!--<result column="price" property="price"/>-->
+        <!--<result column="wish_save" property="wishSave"/>-->
+        <result column="is_hwc" property="isHwc"/>
+        <!--<result column="amount_7_sum_rate" property="amount7ChainGrowth" />-->
+        <!--<result column="url" property="url" />-->
+    </resultMap>
+
+
+    <resultMap id="additionalInfoMap" class="WISH_BASE_ITEM">
+        <result column="merchant_id" property="merchantId"/>
+        <result column="itemid" property="itemId"/>
+        <result column="item_desc" property="itemDesc"/>
+        <result column="sku_size" property="skuSize"/>
+        <result column="sku_price" property="skuPrice"/>
+        <result column="sku_shipping" property="skuShipping" />
+        <result column="sku_color" property="skuColor"/>
+        <result column="sku_image" property="skuImage"/>
+        <result column="sku_sequence_id" property="skuSequenceId"/>
+        <result column="sku_manufacturer_id" property="skuManufacturerId"/>
+        <result column="sku_stock" property="skuStock"/>
+        <result column="sku_time_to_door" property="skuTimeToDoor"/>
+        <result column="sku_stock_amount" property="skuStockAmount"/>
+        <result column="sku_stock_price" property="skuStockPrice"/>
+    </resultMap>
+
+    <!-- 查询字段 -->
+    <!--<sql id="select_field_sql">-->
+        <!--insert_date, merchant_id, itemid, cat_ids, original_price, seller_price, seller_freight_price,-->
+        <!--wish_price, wish_freight_price, gen_time, itemname, main_image, small_image, removed_flag,-->
+        <!--deleted_flag, wish_tag, custom_tag, is_fulfill_by_wish_flag, is_active_flag,-->
+        <!--requires_review_flag, already_recommended_flag, total_stock, offer, fbw_active, `desc`, rate_num,-->
+        <!--wish_num, rate_score, amount_1, price_1, wish_save_1, rate_num_1, amount_7, price_7, wish_save_7,-->
+        <!--rate_num_7, amount_30, price_30, wish_save_30, rate_num_30, extra_image_list,-->
+        <!--case is_hwc when 'True' then 1 when 'False' then 0 else 0 end is_hwc,-->
+        <!--amount7_sum_rate * 100 amount_7_sum_rate-->
+    <!--</sql>-->
+
+    <sql id="select_field_sql">
+        insert_date, merchant_id, itemid, cat_ids, original_price, seller_price, seller_freight_price,
+        wish_price, wish_freight_price, gen_time, itemname, removed_flag,
+        deleted_flag, wish_tag, custom_tag, already_recommended_flag, offer, rate_num,
+        wish_num, rate_score, amount_1, price_1, wish_save_1, rate_num_1, amount_7, price_7, wish_save_7,
+        rate_num_7, extra_image_list,
+        case is_hwc when 'True' then 1 when 'False' then 0 else 0 end is_hwc
+    </sql>
+
+    <!-- 查询指定日期产品信息 -->
+    <select id="queryItemByItemId" parameterClass="java.util.HashMap" resultMap="BaseResultMap">
+        select <include refid="select_field_sql"/>
+        from st_wish_item_base_fatdt0 where itemid = #itemId# and merchant_id = #merchantId#
+        order by insert_date desc limit 1
+    </select>
+
+    <select id="getItemAdditionalInfoByItemId" parameterClass="java.util.HashMap" resultMap="additionalInfoMap">
+        SELECT merchant_id, itemid, item_desc, sku_size, sku_price, sku_shipping, sku_color, sku_image,
+        sku_sequence_id, sku_manufacturer_id, sku_stock, sku_time_to_door, sku_stock_amount,
+        sku_stock_price
+        from st_wish_item_detail_base_fatdt0
+        where itemid = #itemId#
+        and merchant_id = #merchantId#
+        order by insert_date desc limit 1
+    </select>
+</sqlMap>

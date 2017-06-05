@@ -1,0 +1,125 @@
+<rules>
+    <rule>
+        <namespace>ColumnCondition</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+    <rule>
+        <namespace> ComplementItem</namespace>
+        <shardingExpression>hash.apply(fkId) == 4</shardingExpression>
+        <shards>partition4</shards>
+    </rule>
+
+    <rule>
+        <namespace>FocusItem</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+    <rule>
+        <namespace>FocusMarkMap</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+    <rule>
+        <namespace>FocusMerchant</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+    <rule>
+        <namespace>GuessItem</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+
+    <rule>
+        <namespace>GuessMerchant</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <!--<rule>-->
+        <!--<namespace>PushCondition</namespace>-->
+        <!--<shardingExpression>hash.apply(fkId) == 1</shardingExpression>-->
+        <!--<shards>partition1</shards>-->
+    <!--</rule>-->
+    <rule>
+        <namespace>PushItem</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>PushItemMerchantMap</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>SearchCondition</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>SearchItem</namespace>
+        <shardingExpression>hash.apply(fkId) == 4</shardingExpression>
+        <shards>partition4</shards>
+    </rule>
+    <rule>
+        <namespace>UserCommonCat</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>UserData</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>WishCategory</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>DataMarkInfo</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>itemNS</namespace>
+        <shardingExpression>hash.apply(fkId) == 3</shardingExpression>
+        <shards>partition3</shards>
+    </rule>
+    <rule>
+        <namespace>PushRule</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>PushTotal1</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>PushTotal7</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>PushItemRuleTrace</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+
+    <rule>
+        <namespace>PushItemRecycle</namespace>
+        <shardingExpression>hash.apply(fkId) == 1</shardingExpression>
+        <shards>partition1</shards>
+    </rule>
+    <rule>
+        <namespace>WISH_ITEM</namespace>
+        <shardingExpression>hash.apply(fkId) == 3</shardingExpression>
+        <shards>partition3</shards>
+    </rule>
+</rules>

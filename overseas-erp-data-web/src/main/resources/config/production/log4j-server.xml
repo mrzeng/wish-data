@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <!-- Biz 日志文件 -->
+    <appender name="biz_appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs/biz/biz.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH'.log'"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="4096"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[date:%d{yyyy-MM-dd HH:mm:ss}] %m%n"/>
+        </layout>
+        <filter class="com.raycloud.bizlogger.LoggerFilter">
+            <param name="LevelMin" value="40050"/>
+            <param name="LevelMax" value="40050"/>
+        </filter>
+    </appender>
+
+    <!-- Error 日志文件 -->
+    <appender name="error_appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs/error/error.html"/>
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="yyyy-MM-dd-HH'.html'"/>
+        <param name="MaxBackupIndex" value="10"/>
+        <param name="MaxFileSize" value="4000000"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[date:%d{yyyy-MM-dd HH:mm:ss}] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR"/>
+            <param name="LevelMax" value="ERROR"/>
+        </filter>
+    </appender>
+
+    <!-- Info Warn 日志 -->
+    <appender name="info_appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs/info/log.log"/>
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="yyyy-MM-dd-HH'.html'"/>
+        <param name="MaxBackupIndex" value="20"/>
+        <param name="MaxFileSize" value="4MB"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[date:%d{yyyy-MM-dd HH:mm:ss}] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+            <param name="LevelMax" value="WARN"/>
+        </filter>
+    </appender>
+
+    <!-- Console 日志 -->
+    <appender name="console_appender" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-d{yyyy-MM-dd HH:mm:ss} [%5p][%t][%c{1}]-[%M] %m%n"/>
+        </layout>
+    </appender>
+
+
+    <!--##########################trace log start########################################################-->
+    <!--错误日志-添加到root中-->
+    <appender name="TRACE_ERROR_LOGGER" class="org.apache.log4j.DailyRollingFileAppender">
+        <!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 test dev -->
+        <param name="File" value="${webapp.root}/logs2/trace/error.log"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="com.raycloud.eagle.log.ErrorLogLayout"/>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR"/>
+            <param name="LevelMax" value="ERROR"/>
+        </filter>
+    </appender>
+    <!--SQL执行日志-->
+    <appender name="TRACE_SQL_LOGGER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs2/trace/sql.log"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="com.raycloud.eagle.log.SQLLogLayout"/>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG"/>
+            <param name="LevelMax" value="ERROR"/>
+        </filter>
+    </appender>
+    <!--trace日志-->
+    <appender name="TRACE_LOGGER" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="${webapp.root}/logs2/trace/trace.log"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="com.raycloud.eagle.log.TraceLogLayout"/>
+        <!--40100为trace日志,40050为biz日志-->
+        <filter class="com.raycloud.bizlogger.LoggerFilter">
+            <param name="LevelMin" value="40100"/>
+            <param name="LevelMax" value="40100"/>
+        </filter>
+    </appender>
+
+    <!-- biz 配置 -->
+    <appender name="BIZ_LOGGER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs2/trace/biz.log" /><!-- 设置日志输出文件名 -->
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="com.raycloud.eagle.log.BizLogLayout"/>
+        <filter class="com.raycloud.bizlogger.LoggerFilter">
+            <param name="LevelMin" value="40050" />
+            <param name="LevelMax" value="40050" />
+        </filter>
+    </appender>
+
+
+    <appender name="FULLINFO_BIZ_LOGGER" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${webapp.root}/logs2/trace/fullinfo_biz.log"/>
+        <!-- 设置日志输出文件名 -->
+        <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+        <param name="encoding" value="utf-8"/>
+        <layout class="com.raycloud.eagle.log.CustomBizLogLayout"/>
+        <filter class="com.raycloud.bizlogger.LoggerFilter">
+            <param name="LevelMin" value="90002"/>
+            <param name="LevelMax" value="90002"/>
+        </filter>
+    </appender>
+
+<!--
+    <appender name="IBatis" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG"/>
+            <param name="LevelMax" value="DEBUG"/>
+        </filter>
+    </appender>
+
+    <logger name="com.ibatis" additivity="true">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="java.sql.Connection" additivity="true">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="java.sql.Statement" additivity="true">
+        <level value="DEBUG"/>
+    </logger>
+    <logger name="java.sql.PreparedStatement" additivity="true">
+        <level value="DEBUG"/>
+        <appender-ref ref="IBatis"/>
+    </logger>
+    <logger name="java.sql.ResultSet" additivity="true">
+        <level value="DEBUG"/>
+        <appender-ref ref="IBatis"/>
+    </logger>
+-->
+
+
+
+
+
+    <!--SQL配置-->
+    <logger name="trace.sql" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="TRACE_SQL_LOGGER"/>
+    </logger>
+    <!--trace配置-->
+    <logger name="trace" additivity="false">
+        <appender-ref ref="TRACE_LOGGER"/>
+    </logger>
+    <!--##########################trace log end########################################################-->
+
+    <root>
+        <priority value="INFO"/>
+        <!--<appender-ref ref="console_appender" />-->
+        <appender-ref ref="biz_appender" />
+        <!--<appender-ref ref="info_appender" />-->
+        <appender-ref ref="error_appender" />
+        <!-- 添加一个错误日志的配置,错误日志的JSON格式输出实现 -->
+        <appender-ref ref="TRACE_ERROR_LOGGER"/>
+        <appender-ref ref="TRACE_LOGGER"/>
+        <!--<appender-ref ref="IBatis"/>-->
+            
+        <!--<appender-ref ref="FULLINFO_BIZ_LOGGER"/>-->
+
+    </root>
+
+</log4j:configuration>

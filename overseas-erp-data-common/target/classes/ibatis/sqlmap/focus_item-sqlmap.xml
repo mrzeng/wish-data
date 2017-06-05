@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="FocusItem">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="FocusItemQuery" type="com.raycloud.overseas.erp.data.common.query.FocusItemQuery"/>
+    <typeAlias alias="FocusItem" type="com.raycloud.overseas.erp.data.common.pojo.FocusItem"/>
+    <resultMap id="focusItem" class="FocusItem">
+            <result property="userId" column="user_id"/>
+            <result property="itemId" column="item_id"/>
+            <result property="id" column="id"/>
+            <result property="focus" column="focus"/>
+            <result property="updated" column="updated"/>
+            <result property="created" column="created"/>
+            <result property="markId" column="mark_id"/>
+            <result property="collected" column="collected"/>
+            <result property="itemName" column="item_name"/>
+            <result property="expireTime" column="expire_time"/>
+            <result property="founderId" column="founder_id"/>
+        </resultMap>
+    <resultMap id="itemIdMap" class="java.util.HashMap">
+        <result property="itemId" column="item_id"  javaType="java.lang.String"/>
+    </resultMap>
+    <!-- Select SQL -->
+    <sql id="focusItem.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                user_id , item_id , id , focus , updated , created , mark_id , collected , item_name , expire_time,founder_id        </isEmpty>
+    </dynamic>
+        FROM focus_item
+    </sql>
+    <sql id="focusItemList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="userId" prepend=" AND ">
+            user_id=#userId#
+        </isNotNull>
+            <isNotNull property="founderId" prepend=" AND ">
+                founder_id=#founderId#
+            </isNotNull>
+                                    <isNotNull property="itemId" prepend=" AND ">
+            item_id=#itemId#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+            <isNotNull property="focus" prepend=" AND ">
+                focus=#focus#
+            </isNotNull>
+            <isNotNull property="id" prepend=" AND ">
+            id=#id#
+             </isNotNull>
+
+                                        <isNotNull property="updatedStart" prepend=" AND ">
+                <![CDATA[  updated >= #updatedStart# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEnd" prepend=" AND ">
+                <![CDATA[  updated <= #updatedEnd# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEqual" prepend=" AND ">
+                <![CDATA[  updated = #updatedEqual# ]]>
+            </isNotNull>
+                                <isNotNull property="createdStart" prepend=" AND ">
+                <![CDATA[  created >= #createdStart# ]]>
+            </isNotNull>
+            <isNotNull property="createdEnd" prepend=" AND ">
+                <![CDATA[  created <= #createdEnd# ]]>
+            </isNotNull>
+            <isNotNull property="createdEqual" prepend=" AND ">
+                <![CDATA[  created = #createdEqual# ]]>
+            </isNotNull>
+                            <isNotNull property="markId" prepend=" AND ">
+            mark_id=#markId#
+        </isNotNull>
+                                    <isNotNull property="collected" prepend=" AND ">
+            collected=#collected#
+        </isNotNull>
+                                    <isNotNull property="itemName" prepend=" AND ">
+                                        <![CDATA[ item_name like concat('%',#itemName#,'%') ]]>
+        </isNotNull>
+                                        <isNotNull property="expireTimeStart" prepend=" AND ">
+                <![CDATA[  expire_time >= #expireTimeStart# ]]>
+            </isNotNull>
+            <isNotNull property="expireTimeEnd" prepend=" AND ">
+                <![CDATA[  expire_time <= #expireTimeEnd# ]]>
+            </isNotNull>
+            <isNotNull property="expireTimeEqual" prepend=" AND ">
+                <![CDATA[  expire_time = #expireTimeEqual# ]]>
+            </isNotNull>
+            <isNotEmpty prepend="and" property="markIdList">
+                item_id in (select t2.focus_id from focus_mark_map t2 where t2.focus_type=2 and t2.mark_id in
+                <iterate open="(" close=")" conjunction="," property="markIdList">
+                    #markIdList[]#
+                </iterate>
+                )
+            </isNotEmpty>
+                    </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="focusItemList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="focusItemList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getFocusItemByKey" resultMap="focusItem"  parameterClass="hashMap">
+                      SELECT       user_id , item_id , id , focus , updated , created , mark_id , collected , item_name , expire_time,founder_id  FROM focus_item
+                WHERE
+                       user_id=#userId# AND founder_id=#founderId# AND item_id=#itemId# limit 1        </select>
+                <select id="getFocusItemsByKeys" resultMap="focusItem"  parameterClass="hashMap">
+            SELECT       user_id , item_id , id , focus , updated , created , mark_id , collected , item_name , expire_time,founder_id  FROM focus_item
+                WHERE
+                                    user_id=#userId# AND founder_id=#founderId# AND
+                                item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM focus_item
+                WHERE
+                        user_id=#userId#  AND             item_id=#itemId#             </delete>
+
+    <delete id="deleteByItemId"  parameterClass="hashMap">
+        DELETE FROM focus_item WHERE item_id=#itemId#             </delete>
+
+        <delete id="deleteByKeys">
+        DELETE FROM focus_item
+            WHERE
+                                user_id=#userId# AND
+                                item_id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateFocusItemByKey" parameterClass="FocusItem">
+            UPDATE focus_item
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="userId">
+                                        user_id =  substring(#userId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="itemId">
+                                        item_id =  substring(#itemId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="id">
+                            id = #id#
+                    </isNotNull>
+                        <isNotNull prepend="," property="focus">
+                            focus = #focus#
+                    </isNotNull>
+                        <isNotNull prepend="," property="updated">
+                            updated = #updated#
+                    </isNotNull>
+                        <isNotNull prepend="," property="created">
+                            created = #created#
+                    </isNotNull>
+                        <isNotNull prepend="," property="markId">
+                            mark_id = #markId#
+                    </isNotNull>
+                        <isNotNull prepend="," property="collected">
+                            collected = #collected#
+                    </isNotNull>
+                        <isNotNull prepend="," property="itemName">
+                                        item_name =  substring(#itemName#,1,2048)
+                    </isNotNull>
+                        <isNotNull prepend="," property="expireTime">
+                            expire_time = #expireTime#
+                    </isNotNull>
+                <isNotNull prepend="," property="founderId">
+                    founder_id = #founderId#
+                </isNotNull>
+                            </dynamic>
+            WHERE
+                        user_id=#userId#  AND founder_id=#founderId#  AND item_id=#itemId#             </update>
+
+        <!-- 分页 -->
+    <select id="getFocusItemListWithPage" parameterClass="FocusItemQuery" resultMap="focusItem">
+        <include refid="focusItem.selector"/>
+        <include refid="focusItemList.where"/>
+        <include refid="focusItemList.order"/>
+        <include refid="focusItemList.limit"/>
+    </select>
+    <select id="getFocusItemListCount" parameterClass="FocusItemQuery" resultClass="int">
+        SELECT count(1) FROM focus_item
+        <include refid="focusItemList.where"/>
+    </select>
+    <select id="getFocusItemList" parameterClass="FocusItemQuery" resultMap="focusItem">
+        <include refid="focusItem.selector"/>
+        <include refid="focusItemList.where"/>
+        <include refid="focusItemList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getFocusItemListWithPageFields" parameterClass="FocusItemQuery" remapResults="true" resultClass="FocusItem">
+        <include refid="focusItem.selector"/>
+        <include refid="focusItemList.where"/>
+        <include refid="focusItemList.order"/>
+        <include refid="focusItemList.limit"/>
+    </select>
+    <select id="getFocusItemListFields" parameterClass="FocusItemQuery" remapResults="true" resultClass="FocusItem">
+        <include refid="focusItem.selector"/>
+        <include refid="focusItemList.where"/>
+        <include refid="focusItemList.order"/>
+    </select>
+    <insert id="insertFocusItem" parameterClass="FocusItem">
+    INSERT INTO focus_item
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="userId">
+        user_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="itemId">
+        item_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="focus">
+        focus
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="updated">
+        updated
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="created">
+        created
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="markId">
+        mark_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="collected">
+        collected
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="itemName">
+        item_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="expireTime">
+        expire_time
+            </isNotEmpty >
+
+        <isNotEmpty prepend="," property="founderId">
+            founder_id
+        </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="userId">
+                                substring(#userId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="itemId">
+                                substring(#itemId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="id">
+                    #id#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="focus">
+                    #focus#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="updated">
+                    #updated#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="created">
+                    #created#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="markId">
+                    #markId#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="collected">
+                    #collected#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="itemName">
+                                substring(#itemName#,1,2048)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="expireTime">
+                    #expireTime#
+        </isNotEmpty >
+        <isNotEmpty  prepend="," property="founderId">
+            #founderId#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+    <select id="getAllCollectItem" parameterClass="map" resultClass="hashmap">
+        SELECT
+        a.wish_product_id ,
+        b.creator_id
+        FROM
+        wish_offline_product$tbId$ a
+        JOIN local_product$tbId$ b
+        WHERE
+        a.local_product_id = b.local_product_id
+        and b.source ='数据模块';
+    </select>
+
+    <select id="getItemIdMap" parameterClass="FocusItemQuery" resultMap="itemIdMap">
+        select item_id from focus_item
+        <include refid="focusItemList.where"/>
+    </select>
+
+    <update id="updateFocusItemByQuery" parameterClass="FocusItemQuery">
+        UPDATE focus_item
+        <dynamic prepend="SET" >
+            <isNotNull prepend="," property="updated">
+                updated = #updated#
+            </isNotNull>
+            <isNotNull prepend="," property="collected">
+                collected = #collected#
+            </isNotNull>
+            <isNotNull prepend="," property="expireTime">
+                expire_time = #expireTime#
+            </isNotNull>
+        </dynamic>
+        WHERE founder_id=#founderId#
+        <isNotNull property="keys" prepend=" AND ">
+            item_id in
+            <iterate conjunction="," open="(" close=")" property="keys">
+                #keys[]#
+            </iterate>
+        </isNotNull>
+    </update>
+
+</sqlMap>

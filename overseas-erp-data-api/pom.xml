@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+    <!--注意:测试环境最好不要又任何单独依赖(可以有公共依赖),防止deploy出错-->
+    <!--升级版本的时候记得改这里的version-->
+
+    <groupId>com.raycloud</groupId>
+    <artifactId>overseas-erp-data-api</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+   <packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--配置私服的地址-->
+    <distributionManagement>
+        <repository>
+            <id>raycloud</id>
+            <name>Local Nexus Repository</name>
+            <url>http://maven.superboss.cc:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>raycloud</id>
+            <name>Local Nexus Repository</name>
+            <url>http://maven.superboss.cc:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+</project>

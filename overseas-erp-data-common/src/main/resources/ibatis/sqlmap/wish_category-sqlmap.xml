@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="WishCategory">
+    <!-- Alias Map Defined -->
+    <typeAlias alias="WishCategoryQuery" type="com.raycloud.overseas.erp.data.common.query.WishCategoryQuery"/>
+    <typeAlias alias="WishCategory" type="com.raycloud.overseas.erp.data.domain.WishCategory"/>
+    <resultMap id="wishCategory" class="WishCategory">
+            <result property="id" column="id"/>
+            <result property="catId" column="cat_id"/>
+            <result property="chineseName" column="chinese_name"/>
+            <result property="englishName" column="english_name"/>
+            <result property="parentId" column="parent_id"/>
+            <result property="level" column="level"/>
+            <result property="updated" column="updated"/>
+            <result property="isValid" column="is_valid"/>
+        </resultMap>
+    <!-- Select SQL -->
+    <sql id="wishCategory.selector">
+        SELECT
+    <dynamic>
+        <isNotEmpty property="fields">
+            $fields$
+        </isNotEmpty>
+        <isEmpty property="fields">
+                id , cat_id , chinese_name , english_name , parent_id , level , updated , is_valid        </isEmpty>
+    </dynamic>
+        FROM wish_category
+    </sql>
+    <sql id="wishCategoryList.where">
+        <dynamic prepend=" WHERE ">
+                    <isNotNull property="id" prepend=" AND ">
+            id=#id#
+        </isNotNull>
+                    <isNotNull property="keys" prepend=" AND ">
+                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+            </isNotNull>
+
+                                    <isNotNull property="catId" prepend=" AND ">
+            cat_id=#catId#
+        </isNotNull>
+                                    <isNotNull property="chineseName" prepend=" AND ">
+            chinese_name=#chineseName#
+        </isNotNull>
+                                    <isNotNull property="englishName" prepend=" AND ">
+            english_name=#englishName#
+        </isNotNull>
+                                    <isNotNull property="parentId" prepend=" AND ">
+            parent_id=#parentId#
+        </isNotNull>
+                                    <isNotNull property="level" prepend=" AND ">
+            level=#level#
+        </isNotNull>
+                                        <isNotNull property="updatedStart" prepend=" AND ">
+                <![CDATA[  updated >= #updatedStart# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEnd" prepend=" AND ">
+                <![CDATA[  updated <= #updatedEnd# ]]>
+            </isNotNull>
+            <isNotNull property="updatedEqual" prepend=" AND ">
+                <![CDATA[  updated = #updatedEqual# ]]>
+            </isNotNull>
+                            <isNotNull property="isValid" prepend=" AND ">
+            is_valid=#isValid#
+        </isNotNull>
+            <isNotNull property="catIdList" prepend=" AND ">
+                cat_id in
+                <iterate conjunction="," open="(" close=")" property="catIdList">
+                    #catIdList[]#
+                </iterate>
+            </isNotNull>
+                            </dynamic>
+    </sql>
+
+    <!-- 用#号会导致druid连接池报错 -->
+    <sql id="wishCategoryList.order">
+        <dynamic prepend=" ORDER BY ">
+            <isNotEmpty property="orderFields">
+                <iterate property="orderFields" conjunction="," open="" close="">
+                    $orderFields[].fieldName$  $orderFields[].order$
+                </iterate>
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+    <sql id="wishCategoryList.limit">
+        <dynamic prepend=" LIMIT  ">
+            <isNotEmpty property="startRow">
+                #startRow#,#pageSize#
+            </isNotEmpty>
+        </dynamic>
+    </sql>
+
+            <!-- 根据主键查询 -->
+        <select id="getWishCategoryByKey" resultMap="wishCategory"  parameterClass="hashMap">
+                      SELECT       id , cat_id , chinese_name , english_name , parent_id , level , updated , is_valid  FROM wish_category
+                WHERE
+                       id=#id#         </select>
+                <select id="getWishCategorysByKeys" resultMap="wishCategory"  parameterClass="hashMap">
+            SELECT       id , cat_id , chinese_name , english_name , parent_id , level , updated , is_valid  FROM wish_category
+                WHERE
+                                    id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                    </select>
+    
+            <!-- 根据主键删除 -->
+        <delete id="deleteByKey"  parameterClass="hashMap">
+            DELETE FROM wish_category
+                WHERE
+                        id=#id#             </delete>
+    
+        <delete id="deleteByKeys">
+        DELETE FROM wish_category
+            WHERE
+                                id in
+                <iterate conjunction="," open="(" close=")" property="keys">
+                    #keys[]#
+                </iterate>
+                </delete>
+    
+            <!-- 根据主键更新 -->
+                        <update id="updateWishCategoryByKey" parameterClass="WishCategory">
+            UPDATE wish_category
+            <dynamic prepend="SET" >
+            <isNotNull prepend="," property="id">
+                                        id =  substring(#id#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="catId">
+                                        cat_id =  substring(#catId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="chineseName">
+                                        chinese_name =  substring(#chineseName#,1,50)
+                    </isNotNull>
+                        <isNotNull prepend="," property="englishName">
+                                        english_name =  substring(#englishName#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="parentId">
+                                        parent_id =  substring(#parentId#,1,255)
+                    </isNotNull>
+                        <isNotNull prepend="," property="level">
+                            level = #level#
+                    </isNotNull>
+                        <isNotNull prepend="," property="updated">
+                            updated = #updated#
+                    </isNotNull>
+                        <isNotNull prepend="," property="isValid">
+                            is_valid = #isValid#
+                    </isNotNull>
+                            </dynamic>
+            WHERE
+                        id=#id#             </update>
+        <!-- 分页 -->
+    <select id="getWishCategoryListWithPage" parameterClass="WishCategoryQuery" resultMap="wishCategory">
+        <include refid="wishCategory.selector"/>
+        <include refid="wishCategoryList.where"/>
+        <include refid="wishCategoryList.order"/>
+        <include refid="wishCategoryList.limit"/>
+    </select>
+    <select id="getWishCategoryListCount" parameterClass="WishCategoryQuery" resultClass="int">
+        SELECT count(1) FROM wish_category
+        <include refid="wishCategoryList.where"/>
+    </select>
+    <select id="getWishCategoryList" parameterClass="WishCategoryQuery" resultMap="wishCategory">
+        <include refid="wishCategory.selector"/>
+        <include refid="wishCategoryList.where"/>
+        <include refid="wishCategoryList.order"/>
+    </select>
+
+<!-- 如果使用自定义字段查询,则要使用resultClass否则会出现异常
+注意：ibatis存在SQL缓存，所以自定义字段的时候需要开启 remapResults="true" 存在一定性能问题
+-->
+    <select id="getWishCategoryListWithPageFields" parameterClass="WishCategoryQuery" remapResults="true" resultClass="WishCategory">
+        <include refid="wishCategory.selector"/>
+        <include refid="wishCategoryList.where"/>
+        <include refid="wishCategoryList.order"/>
+        <include refid="wishCategoryList.limit"/>
+    </select>
+    <select id="getWishCategoryListFields" parameterClass="WishCategoryQuery" remapResults="true" resultClass="WishCategory">
+        <include refid="wishCategory.selector"/>
+        <include refid="wishCategoryList.where"/>
+        <include refid="wishCategoryList.order"/>
+    </select>
+    <insert id="insertWishCategory" parameterClass="WishCategory">
+    INSERT INTO wish_category
+    <dynamic prepend="(" close=")">
+                <isNotEmpty prepend="," property="id">
+        id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="catId">
+        cat_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="chineseName">
+        chinese_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="englishName">
+        english_name
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="parentId">
+        parent_id
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="level">
+        level
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="updated">
+        updated
+            </isNotEmpty >
+                <isNotEmpty prepend="," property="isValid">
+        is_valid
+            </isNotEmpty >
+            </dynamic>
+    VALUES
+    <dynamic prepend="(" close=")">
+            <isNotEmpty  prepend="," property="id">
+                                substring(#id#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="catId">
+                                substring(#catId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="chineseName">
+                                substring(#chineseName#,1,50)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="englishName">
+                                substring(#englishName#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="parentId">
+                                substring(#parentId#,1,255)
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="level">
+                    #level#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="updated">
+                    #updated#
+        </isNotEmpty >
+                <isNotEmpty  prepend="," property="isValid">
+                    #isValid#
+        </isNotEmpty >
+        </dynamic>
+</insert>
+
+            </sqlMap>

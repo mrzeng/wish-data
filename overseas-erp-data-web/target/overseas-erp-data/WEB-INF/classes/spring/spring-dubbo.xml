@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+        
+
+    <dubbo:application name="overseas" />
+
+ 	<dubbo:registry protocol="zookeeper" address="zoo6.superboss.cc:30002,zoo5.superboss.cc:30002,zoo4.superboss.cc:30002" />
+
+    <!-- db密码加密 -->
+	<dubbo:reference id="secretRequest" interface="com.raycloud.secret_api.api.SecretRequest" />
+
+    <bean id="memSession" class="com.raycloud.handle.impl.SuperMemSessionHandleImpl">
+        <property name="memSessionRequest" ref="memSessionRequest"/>
+    </bean>
+
+    <!--  生成远程服务代理，可以和本地bean一样使用demoService  -->
+	<dubbo:reference id="memSessionRequest" interface="com.raycloud.memsession.api.MemSessionRequest" version="3.3.0_NOIP_CESHI"  timeout="8000" />
+
+    <!-- 数据api服务 -->
+    <dubbo:reference init="true" id="mjEtlInfoService" interface="com.raycloud.overseas.data.api.dubbo.service.IEtlInfoService" version="1.0.0_test1" timeout="12000" />
+    <dubbo:reference init="true" id="mjIndustryService" interface="com.raycloud.overseas.data.api.dubbo.service.IIndustryService" version="1.0.0_test1" timeout="12000" />
+    <dubbo:reference init="true" id="mjShopService" interface="com.raycloud.overseas.data.api.dubbo.service.IShopService" version="1.0.0_test1" timeout="12000" />
+    <dubbo:reference init="true" id="mjItemService" interface="com.raycloud.overseas.data.api.dubbo.service.IItemService" version="1.0.0_test1" timeout="12000" />
+
+    <!--数据产品服务-->
+    <dubbo:service interface="com.raycloud.overseas.erp.data.api.IndustryService" ref="localIndustryService" version="1.0.0_test" timeout="8000"></dubbo:service>
+
+    <!--产品上架接口-->
+    <dubbo:reference id="platformWishApiImpl" interface="com.raycloud.overseas.erp.platform.dubbo.api.PlatformWishApi" timeout="8000" version="1.0.0"/>
+    <dubbo:reference interface="com.raycloud.overseas.erp.services.product.wish.IWishDataService" id="wishDataService" version="1.0.0_dev" timeout="30000"></dubbo:reference>
+
+    <!-- 用户中心接口 -->
+    <dubbo:reference id="teamService" interface="com.raycloud.overseas.usercenter.web.api.service.ITeamService"  version="1.0.0_dev" timeout="8000" />
+    <dubbo:reference lazy="true" init="false" id="shopService" interface="com.raycloud.overseas.usercenter.web.api.service.IShopService" version="1.0.0_test" timeout="8000" />
+    <dubbo:reference lazy="true" init="false" id="userAccountService" interface="com.raycloud.overseas.usercenter.web.api.service.IUserAccountService" version="1.0.0_test" timeout="8000" />
+    <dubbo:reference lazy="true" init="false" id="abConfigService" interface="com.raycloud.overseas.usercenter.web.api.service.IAbConfigService" version="1.0.0_dev" timeout="8000" />
+
+    <!-- 钱包服务接口 -->
+    <dubbo:reference lazy="true" retries="0" id="walletService"  interface="com.raycloud.overseas.usercenter.web.api.service.IWalletService" version="1.0.0_dev" timeout="8000" />
+
+</beans>
